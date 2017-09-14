@@ -12,7 +12,7 @@ class mockArgs(object):
 class BackupManager(object):
     """ BackupManager manages backing up of files in a backup session """
 
-    def __init__(self, param):
+    def __init__(self):
         """ constructor """
         self.next_backup_args = mockArgs()
 

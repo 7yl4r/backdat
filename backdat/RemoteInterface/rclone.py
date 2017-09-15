@@ -97,7 +97,7 @@ def backup(args):
         """ parses units strings from rclone status """
         if (units == "Bytes"):
             return number
-        elif(units == "KBytes"):
+        elif(units == "kBytes"):
             return number*1e3
         elif(units == "MBytes"):
             return number*1e6

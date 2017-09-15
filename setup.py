@@ -26,7 +26,7 @@ setup(name='backdat',
 
     tests_require=['nose'],
     install_requires=[
-        "croniter>=0.3.18"
+        "croniter>=0.3.18" # tested working: 0.3.19
     ],
     #cmdclass={'test': PyTest},
 

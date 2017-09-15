@@ -4,4 +4,4 @@ from backdat.BackupManager import BackupManager
 
 backman = BackupManager()
 
-backman.backup()
+backman.start_backups()

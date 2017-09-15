@@ -1,4 +1,5 @@
 from backdat.RemoteInterface import rclone
+from backdat import backup_plan_parser
 
 class mockArgs(object):
     source = "/home/tylar/backdat/backdat.py"
@@ -50,13 +51,7 @@ class BackupManager(object):
         """
         loads backup plan actions for this host from file into a list
         """
-        # TODO: read this from file
-        return [
-            {
-                'source' : "/home/tylar/backdat/backdat.py",
-                'target' : "gdrive-ty:/IMARS/backups/test/"
-            },{
-                'source' : "/home/tylar/backdat/LICENSE",
-                'target' : "gdrive-ty:/IMARS/backups/test/"
-            }
-        ]
+        return backup_plan_parser.read(
+            "/var/opt/backdat/backup-plan.tsv",  # TODO: make this cross-platform
+            "tylardesk"  # TODO: get this dynamically
+        )

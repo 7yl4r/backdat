@@ -69,7 +69,9 @@ def backup(args):
     process_handler.pre()
 
     logger.info('starting rclone job...')
-    res_stdout = subprocess.check_output(build_rclone_cmd(args),
+    rclone_cmd = build_rclone_cmd(args)
+    logger.info(str(rclone_cmd))
+    res_stdout = subprocess.check_output(rclone_cmd,
         # stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         universal_newlines=True
@@ -95,6 +97,7 @@ def backup(args):
     # record metrics in args.summarylog
     def parse_units(number, units):
         """ parses units strings from rclone status """
+        number = float(number)
         if (units == "Bytes"):
             return number
         elif(units == "kBytes"):
@@ -111,7 +114,7 @@ def backup(args):
     with open(args.summarylog, "w") as sumlog:
         # get last status printout from rclone
         last_status = res_stdout.split("\n")[-6:]
-
+        logger.debug("parsing rclone output: \n" + str(last_status))
         # parse out the various numbers
         byte_num, byte_unit  = last_status[0].split(':')[1].strip().split(' ')[:2]
         bytes_sent = parse_units(byte_num, byte_unit)
@@ -135,11 +138,11 @@ def backup(args):
 
         # write a summary of the rclone output to file
         sumlog.write("{\n" +
-            '\t"backuper.bytes_sent":' + bytes_sent + ',\n'
-            '\t"backuper.avg_speed":' + avg_speed + ',\n'
-            '\t"backuper.errors":' + err_count + ',\n'
-            '\t"backuper.files_checked":' + check_count + ',\n'
-            '\t"backuper.files_sent":' + files_sent + ',\n'
-            '\t"backuper.time_spent":' + time_spent + '\n'
+            '\t"backuper.bytes_sent":' + str(bytes_sent) + ',\n'
+            '\t"backuper.avg_speed":' + str(avg_speed) + ',\n'
+            '\t"backuper.errors":' + str(err_count) + ',\n'
+            '\t"backuper.files_checked":' + str(check_count) + ',\n'
+            '\t"backuper.files_sent":' + str(files_sent) + ',\n'
+            '\t"backuper.time_spent":' + str(time_spent) + '\n'
             "}\n"
         )

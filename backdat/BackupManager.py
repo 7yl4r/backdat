@@ -1,5 +1,6 @@
 from backdat.RemoteInterface import rclone
 from backdat import backup_plan_parser
+from backdat import host_settings_parser
 
 class mockArgs(object):
     source = "/home/tylar/backdat/backdat.py"
@@ -38,9 +39,12 @@ class BackupManager(object):
         return true if we have enough time left in the window to complete
         the next backup task
         """
-        # TODO: load host_settings
-        # TODO: if time left in window
-        return True
+        settings = host_settings_parser.read("/etc/opt/backdat/host-settings.cfg")  # TODO: make this cross-platform
+        if settings[host_settings_parser.KEYS.BACKUP_TIMES] == "* 0-8 * * *":
+            # TODO: if time left in window
+            return True
+        else:
+            return False
 
     def set_next_backup(self, backup_dict):
         """ loads given backup dict into next_backup_args """

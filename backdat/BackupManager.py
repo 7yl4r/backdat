@@ -36,7 +36,8 @@ class BackupManager(object):
                     BackupManager.get_host_setting(host_settings_parser.KEYS.BACKUP_TIMES)
                 )
 
-                cmd = ' /home/tylar/backdat/backdat.py'  # TODO: un-hardcode this path
+                # TODO: un-hardcode these paths
+                cmd = ' /home/tylar/backdat/backdat.py &> /var/opt/backdat/cronjob.log'
                 cronstr = next_scheduled_time.strftime("%M %H %d %m %w")
 
                 with open("/etc/cron.d/backdat", 'w') as cronfile:  # TODO: cross-platform-ize

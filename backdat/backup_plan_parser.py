@@ -3,6 +3,8 @@ basic reading & writing of backup plan files in format in this mockup:
 https://gist.github.com/7yl4r/291f94c5ca16782e147c346471c36695
 """
 
+import warnings
+
 def read(filepath, hostname):
     """
     reads in a backup plan from file
@@ -14,18 +16,25 @@ def read(filepath, hostname):
     plan = list()
 
     with open(filepath, 'r') as planfile:
-        for line in planfile:
-            if line.lstrip().startswith("#"):  # skip comment lines
-                pass
-            else:
-                datetime, source, target = map(str.strip,
-                    line.split("\t")
-                )
-                line_hostname, path = map(str.strip,
-                    source.split(":")
-                )
-                if hostname == line_hostname:
-                    plan.append({"source": path, "target": target})
+        for i, line in enumerate(planfile):
+            try:
+                if line.lstrip().startswith("#"):  # skip comment lines
+                    pass
+                elif not line.strip():  # skip blank lines
+                    pass
+                else:
+                    datetime, source, target = map(str.strip,
+                        line.split("\t")
+                    )
+                    line_hostname, path = map(str.strip,
+                        source.split(":")
+                    )
+                    if hostname == line_hostname:
+                        plan.append({"source": path, "target": target})
+            except ValueError as v_err:
+                warnings.warn("\nWARN: Parse error ({})\n\t@ {} L{} :\n'''\n{}'''\n".format(
+                    v_err, filepath, i, line
+                ))
     return plan
 
 def write(filepath):

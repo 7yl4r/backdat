@@ -37,7 +37,7 @@ class BackupManager(object):
                 )
 
                 # TODO: un-hardcode these paths
-                cmd = ' /home/tylar/backdat/backdat.py &> /var/opt/backdat/cronjob.log'
+                cmd = ' root nice -n 15 /home/tylar/backdat/backdat.py &> /var/opt/backdat/cronjob.log'
                 cronstr = next_scheduled_time.strftime("%M %H %d %m %w")
 
                 with open("/etc/cron.d/backdat", 'w') as cronfile:  # TODO: cross-platform-ize

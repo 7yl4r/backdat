@@ -25,6 +25,7 @@ class BackupManager(object):
         """
         starts running backups until we are outside of our allotted window
         """
+        print("\n\nSTART!!!\n\n")
         for next_backup in BackupManager.load_backup_plan():
             self.set_next_backup(next_backup)
 
@@ -37,7 +38,7 @@ class BackupManager(object):
                 )
 
                 # TODO: un-hardcode these paths
-                cmd = ' root nice -n 15 /home/tylar/backdat/backdat.py &> /var/opt/backdat/cronjob.log'
+                cmd = ' root /home/tylar/backdat/backdat.sh &> /var/opt/backdat/cronjob.log'
                 cronstr = next_scheduled_time.strftime("%M %H %d %m %w")
 
                 with open("/etc/cron.d/backdat", 'w') as cronfile:  # TODO: cross-platform-ize
@@ -45,6 +46,7 @@ class BackupManager(object):
                     cronfile.write(cronstr + ' ' + cmd + '\n')
 
                 # TODO: update backup plan before exiting
+                print("\n\nEND\n\n")
                 return
     def do_next_backup(self):
         """

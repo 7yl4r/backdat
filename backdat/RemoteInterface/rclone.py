@@ -10,16 +10,16 @@ import re
 # NONE (yet...)
 
 # === global vars
-MY_PATH    = '/opt/gdrive-backuper/'  # TODO: fix this
-RCLONE     = MY_PATH + "rclone/rclone"
+MY_PATH    = '/var/opt/backdat/'
+RCLONE     = "rclone"
 RCLONE_CFG = MY_PATH + "rclone.conf"
 
 if not MY_PATH in sys.path:  # TODO: rm
     sys.path.append(MY_PATH)
 
-# === imports from this package  # TODO: package these separate from gdrive_backuper & require in setup.py
-from gdrive_backup.ProcessWrapHandler import ProcessWrapHandler
-from gdrive_backup.DotfileConfig import DotfileConfig
+# === imports from this package
+from backdat.ProcessWrapHandler import ProcessWrapHandler
+from backdat.DotfileConfig import DotfileConfig
 
 # === logger setup
 logger = logging.getLogger('backdat.rclone')

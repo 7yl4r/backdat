@@ -14,7 +14,7 @@ except ImportError:
 
 
 # dependencies:
-from gdrive_backup import DotfileConfig
+from backdat import DotfileConfig
 
 class Test_dotfile_config_loader(TestCase):
 

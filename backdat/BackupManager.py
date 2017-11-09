@@ -43,7 +43,8 @@ class BackupManager(object):
                 else:
                     self.logger.info("Not within backup window.")
                     break
-
+            else:
+                self.logger.warn("Finished all backups with time to spare!")
         # schedule next run of BackupManager in crontab & exit
         finally:
             winend, next_scheduled_time = BackupManager.get_window_edges(

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import logging
 
 from croniter import croniter
 
@@ -26,12 +27,13 @@ class BackupManager(object):
 
     def __init__(self):
         self.next_backup_args = BackupArgs()
+        self.logger = logging.getLogger(__name__)
 
     def start_backups(self):
         """
         starts running backups until we are outside of our allotted window
         """
-        print("\n\nSTART!!!\n\n")
+        self.logger.info("\n\nSTART!!!\n\n")
         try:
             for next_backup in BackupManager.load_backup_plan():
                 self.set_next_backup(next_backup)
@@ -59,7 +61,7 @@ class BackupManager(object):
                 #   is failing in a way that prevents it from scheduling )
 
             # TODO: update backup plan before exiting
-            print("\n\nEND\n\n")
+            self.logger.info("\n\nEND\n\n")
 
     def do_next_backup(self):
         """

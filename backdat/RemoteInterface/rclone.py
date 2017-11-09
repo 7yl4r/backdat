@@ -21,16 +21,6 @@ if not MY_PATH in sys.path:  # TODO: rm
 from backdat.ProcessWrapHandler import ProcessWrapHandler
 from backdat.DotfileConfig import DotfileConfig
 
-# === logger setup
-logger = logging.getLogger('backdat.rclone')
-logger.setLevel(logging.DEBUG)
-
-log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-logger.addHandler(console_handler)
-
 def build_rclone_cmd(args):
     """
     builds up the command for rclone
@@ -52,9 +42,11 @@ def backup(args):
     main backup function. performs backup using rclone with additional
     features.
     """
+    logger = logging.getLogger(__file__)
     logger.info('starting backuper...')
     logfile_handler = logging.FileHandler(args.log)
     #logfile_handler.setLevel(logging.DEBUG)
+    log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     logfile_handler.setFormatter(log_formatter)
     logger.addHandler(logfile_handler)
 

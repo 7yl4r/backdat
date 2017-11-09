@@ -8,7 +8,7 @@ from backdat import backup_plan_parser
 from backdat import host_settings_parser
 
 # TODO: un-hardcode these
-backdat_exe_path = "/home/tylar/backdat/backdat.sh"
+backdat_exe_path = "/home/tylar/backdat/backdat.py"
 cronjob_log_path = "/var/opt/backdat/cronjob.log"
 hostname = "tylardesk"
 

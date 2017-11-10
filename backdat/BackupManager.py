@@ -4,7 +4,7 @@ import logging
 from croniter import croniter
 
 from backdat.RemoteInterface import rclone
-from backdat import backup_plan_parser
+from backdat.file_parsers import backup_plan
 from backdat import host_settings_parser
 
 # TODO: un-hardcode these
@@ -139,7 +139,7 @@ class BackupManager(object):
         """
         PLAN_PATH="/var/opt/backdat/backup-plan.tsv"
         # self.logger.info("loading backup plan from " + PLAN_PATH)
-        return backup_plan_parser.read(
+        return backup_plan.read(
             PLAN_PATH,  # NOTE:not cross-platform
             hostname
         )

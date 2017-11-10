@@ -8,13 +8,13 @@ from backdat import backup_plan_parser
 from backdat import host_settings_parser
 
 # TODO: un-hardcode these
-backdat_exe_path = "/home/tylar/backdat/backdat.py"
+backdat_exe_path = "/opt/backdat/backdat.py"
 cronjob_log_path = "/var/opt/backdat/cronjob.log"
-hostname = "tylardesk"
+hostname = "thing3"
 
 class BackupArgs(object):
     """ basically a dict to pass to the backuper... why didn't I just use a dict? """
-    source = "/home/tylar/backdat/backdat.py"
+    source = "/opt/backdat/backdat.py"
     target = "gdrive-ty:/IMARS/backups/test/"
     log = "/var/opt/backdat/backup.log"
     summarylog = "/var/opt/backdat/summary.log"

@@ -9,5 +9,5 @@ echo $PYTHONPATH
 echo "----------------------------------------------------"
 echo $LD_LIBRARY_PATH
 echo "----------------------------------------------------"
-cd /home/tylar/backdat
-/usr/bin/env python3 /home/tylar/backdat/backdat.py #&> /var/opt/backdat/cronjob.log
+cd /opt/backdat
+/usr/bin/env python3 /opt/backdat/backdat.py #&> /var/opt/backdat/cronjob.log

@@ -4,7 +4,7 @@
 from argparse import ArgumentParser
 import logging
 
-from backdat.BackupManager import BackupManager
+from backdat.main import backup, status
 
 if __name__ == "__main__":
     # === set up arguments
@@ -14,6 +14,20 @@ if __name__ == "__main__":
                         action="count",
                         default=0
     )
+    parser.set_defaults(func=backup)  # set default behavior if subcommand not given
+
+    subparsers = parser.add_subparsers(
+        title='subcommands',
+        description='valid subcommands'
+        # help='host coverage assessment'
+    )
+
+    parser_status = subparsers.add_parser('status', help='host coverage assessment')
+    # parser_status.add_argument('hostname', type=str, help='name of host to check')
+    parser_status.set_defaults(func=status)
+
+    parser_backup = subparsers.add_parser('backup', help='try backing up right now')
+    parser_backup.set_defaults(func=backup)
 
     args = parser.parse_args()
 
@@ -36,6 +50,4 @@ if __name__ == "__main__":
     # # (optional) add the handlers (if any) to the logger
     # logger.addHandler(handler)
 
-    # === call your project's main function
-    backman = BackupManager()
-    backman.start_backups()
+    args.func(args)

@@ -18,8 +18,8 @@ if __name__ == "__main__":
 
     subparsers = parser.add_subparsers(
         title='subcommands',
-        description='valid subcommands'
-        # help='host coverage assessment'
+        description='usage: `backdat $subcommand` ',
+        help='addtnl help for subcommands: `backdat $subcommand -h`'
     )
 
     parser_status = subparsers.add_parser('status', help='host coverage assessment')

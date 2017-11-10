@@ -1,6 +1,6 @@
 import logging
 
-from backdat import host_settings_parser
+from backdat.file_parsers import host_settings
 
 
 def get_theoretical_assessment():

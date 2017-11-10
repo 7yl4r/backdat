@@ -4,8 +4,7 @@ import logging
 from croniter import croniter
 
 from backdat.RemoteInterface import rclone
-from backdat.file_parsers import backup_plan
-from backdat import host_settings_parser
+from backdat.file_parsers import backup_plan, host_settings
 
 # TODO: un-hardcode these
 backdat_exe_path = "/opt/backdat/backdat.py"
@@ -48,7 +47,7 @@ class BackupManager(object):
         # schedule next run of BackupManager in crontab & exit
         finally:
             winend, next_scheduled_time = BackupManager.get_window_edges(
-                BackupManager.get_host_setting(host_settings_parser.KEYS.BACKUP_TIMES)
+                BackupManager.get_host_setting(host_settings.KEYS.BACKUP_TIMES)
             )
 
             cmd = ' root {}'.format(backdat_exe_path)
@@ -80,7 +79,7 @@ class BackupManager(object):
 
     @staticmethod
     def get_host_setting(key):
-        settings = host_settings_parser.read("/etc/opt/backdat/host-settings.cfg")  # NOTE: not cross-platform
+        settings = host_settings.read("/etc/opt/backdat/host-settings.cfg")  # NOTE: not cross-platform
         return settings[key]
 
     @staticmethod
@@ -92,7 +91,7 @@ class BackupManager(object):
         estimated_next_backup_tf = datetime.now() + timedelta(minutes=5)  # NOTE: could calc better estimate
         return BackupManager.inside_cron_window(
             estimated_next_backup_tf,
-            BackupManager.get_host_setting(host_settings_parser.KEYS.BACKUP_TIMES)
+            BackupManager.get_host_setting(host_settings.KEYS.BACKUP_TIMES)
         )
 
     @staticmethod

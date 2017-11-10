@@ -79,7 +79,7 @@ class BackupManager(object):
 
     @staticmethod
     def get_host_setting(key):
-        settings = host_settings.read("/etc/opt/backdat/host-settings.cfg")  # NOTE: not cross-platform
+        settings = host_settings.read()
         return settings[key]
 
     @staticmethod

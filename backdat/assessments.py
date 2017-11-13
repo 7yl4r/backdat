@@ -58,10 +58,12 @@ def assessment_report(assment):
     return nicely formated report of given assessment
     """
     return (
-        "\t {} / {} Mb throughput used over {}\n".format(
+        "\n"+
+        "\t{} / {} Mb throughput used over {}\n".format(
             assment['throughput_demand'],
             assment['throughput_supply'],
             assment['assessment_timedelta']
         ) +
-        "\t\tcoverage: {}%".format(round(assment['coverage'])*100)
+        "\tcoverage: {}%".format(round(assment['coverage'])*100) +
+        "\n"
     )

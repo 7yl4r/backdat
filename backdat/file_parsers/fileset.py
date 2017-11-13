@@ -10,6 +10,11 @@ import logging
 # import pprint # needed for debugging only
 
 default_fileset_path="/etc/opt/backdat/fileset.tsv"
+class STAT_KEYS:
+    SIZE = 'size'
+    SOURCE = 'filepath'
+    TARGET = 'target'
+    UPLOAD_TIME = 'ul_time'
 
 def get_upload_size(fileset_path=default_fileset_path):
     """
@@ -20,8 +25,8 @@ def get_upload_size(fileset_path=default_fileset_path):
     logger.debug("=== file stats ===")
     total_size = 0
     for fstat in get_fileset_statlist(fileset_path):
-        logger.debug("{} : {}b".format(fstat['filepath'].split('/')[-1], fstat['size']))
-        total_size += fstat['size']
+        logger.debug("{} : {}b".format(fstat[STAT_KEYS.SOURCE].split('/')[-1], fstat[STAT_KEYS.SIZE]))
+        total_size += fstat[STAT_KEYS.SIZE]
     logger.debug("=== ==== ===== ===")
     return total_size
 
@@ -72,10 +77,10 @@ def get_fileset_statlist(cfgfilename=default_fileset_path):
                     # ul_est = timedelta(seconds=(ul_time + setup_time))
                     ul_est = None
                     statlist.append({
-                        'filepath': src_filename,
-                        'target': target_dirmap,
-                        'size': size,
-                        'ul_time': ul_est
+                        STAT_KEYS.SOURCE: src_filename,
+                        STAT_KEYS.TARGET: target_dirmap,
+                        STAT_KEYS.SIZE: size,
+                        STAT_KEYS.UPLOAD_TIME: ul_est
                     })
 
     #pp = pprint.PrettyPrinter(indent=4)

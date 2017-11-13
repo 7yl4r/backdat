@@ -5,6 +5,7 @@ from croniter import croniter
 
 from backdat.file_parsers import host_settings
 from backdat.file_parsers import fileset
+from backdat.file_parsers import crontab
 
 def get_theoretical_assessment(
     assess_window=timedelta(days=30)
@@ -59,11 +60,15 @@ def assessment_report(assment):
     """
     return (
         "\n"+
+        "=== Estimated Throughput Analysis ===\n"
         "\t{} / {} Mb throughput used over {}\n".format(
             assment['throughput_demand'],
             assment['throughput_supply'],
             assment['assessment_timedelta']
         ) +
         "\tcoverage: {}%".format(round(assment['coverage'])*100) +
+        "\n"+
+        "=== Backup Scheduling ===\n" +
+        "\t" + crontab.get_next_cron_report() +
         "\n"
     )

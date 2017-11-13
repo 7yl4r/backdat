@@ -16,9 +16,10 @@ def log_backup_action(action, logpath=DEFAULT_PATH):
         backup action we just completed that we want to log
     """
     current_time = datetime.now()
-    with open(logfile, 'a') as logfile:
-        logfile.write("\t".join(
+    with open(logpath, 'a') as logfile:
+        logfile.write("\t".join([
             str(current_time),
             action.source,
-            action.target
-        ))
+            action.target,
+            "\n"
+        ]))

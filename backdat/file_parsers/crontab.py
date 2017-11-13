@@ -5,7 +5,7 @@ helpers for reading/writing to /etc/cron.d/backdat
 import logging
 from datetime import datetime
 
-from backdat.BackupManager import backdat_exe_path
+from backdat import BackupManager
 
 CRON_FILE_PATH = "/etc/cron.d/backdat"  # NOTE: not cross-platform
 CRON_TIME_FMT = "%M %H %d %m %w"
@@ -18,7 +18,7 @@ def write_crontab(time_to_schedule):
         exact time of the start of the next backup window
     """
     logger = logging.getLogger(__name__)
-    cmd = ' root {}'.format(backdat_exe_path)
+    cmd = ' root {}'.format(BackupManager.backdat_exe_path)
     cronstr = time_to_schedule.strftime(CRON_TIME_FMT)
 
     with open(CRON_FILE_PATH, 'w') as cronfile:

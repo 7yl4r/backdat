@@ -1,6 +1,5 @@
 """
-parse host settings file based on mockup at:
-https://gist.github.com/7yl4r/291f94c5ca16782e147c346471c36695
+parse host settings file based on mockup in ./docs/example_files/host-settings.cfg
 """
 
 from croniter import croniter

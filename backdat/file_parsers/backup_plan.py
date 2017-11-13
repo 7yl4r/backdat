@@ -1,6 +1,6 @@
 """
-basic reading & writing of backup plan files in format in this mockup:
-https://gist.github.com/7yl4r/291f94c5ca16782e147c346471c36695
+basic reading & writing of backup plan files
+formatted to match ./docs/example_files/backup-plan.tsv
 """
 
 import warnings

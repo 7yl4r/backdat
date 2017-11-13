@@ -3,7 +3,7 @@ backdat data up.
 
 An attempt at declarative backup.
 
-A backup plan is generated according to information given about your fileset, backup resources, and other preferences. Version 1 user-interface is all text file editing. A mockup of the settings files is in [this gist](https://gist.github.com/7yl4r/291f94c5ca16782e147c346471c36695).
+A backup plan is generated according to information given about your fileset, backup resources, and other preferences. Version 1 user-interface is all text file editing. A mockup of the settings files is in `/docs/example_files`.
 
 # Usage in Current State
 

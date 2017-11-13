@@ -7,8 +7,13 @@ A backup plan is generated according to information given about your fileset, ba
 
 # Usage in Current State
 
-0. define host-level settings in `/etc/opt/backdat/host-settings.cfg`
-1. modify `/var/opt/backdat/backup-plan.tsv` to include backups you want
-2. `sudo /opt/backdat/backdat.py` will do one of two things:
-    * start the backup if within the backup window (and schedule next backup once done)
-    * schedule the next run for the start of the next backup window in `/etc/cron.d/backdat`
+1. define host-level settings in `/etc/opt/backdat/host-settings.cfg`
+2. list files you want backed up in `/etc/opt/backdat/fileset.tsv`
+3. `sudo /opt/backdat/backdat.py plan` to generate a backup plan
+4. `sudo /opt/backdat/backdat.py backup` will do one of two things:
+    * if within the window from host-settings: start the backup then schedule next backup once done
+    * else: schedule the next run for the start of the next backup window using `/etc/cron.d/backdat`
+5. Done! backups should now run forever.
+
+If you change your fileset, you will need to run `plan` again.
+To check on your backups do `sudo /opt/backdat/backdat.py status` at any time.

@@ -26,7 +26,7 @@ def make_plan():
             # backups. You may not want this, so an option to configure it
             # should probably be added.
             month = datetime.today().month
-            trg = (
+            trg = (  # TODO: replace hardcoded target with read from resources.json
                 "gdrive-ty:/IMARS/backups/backdat/" +
                 str(month) + "/" +
                 hostname + "/"

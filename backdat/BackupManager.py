@@ -7,6 +7,7 @@ from croniter import croniter
 from backdat.RemoteInterface import rclone
 from backdat.file_parsers import backup_plan, host_settings
 from backdat.file_parsers import crontab
+from backdat.file_parsers import backup_history
 
 # TODO: un-hardcode these
 backdat_exe_path = "/opt/backdat/backdat.py"
@@ -63,6 +64,7 @@ class BackupManager(object):
         """
         self.logger.info("starting next backup action...")
         rclone.backup(self.next_backup_args)
+        backup_history.log_backup_action(self.next_backup_args)
 
     def set_next_backup(self, backup_dict):
         """ loads given backup dict into next_backup_args """

@@ -6,6 +6,7 @@ from croniter import croniter
 from backdat.file_parsers import host_settings
 from backdat.file_parsers import fileset
 from backdat.file_parsers import crontab
+from backdat.file_parsers import backup_history
 
 def get_theoretical_assessment(
     assess_window=timedelta(days=30)
@@ -58,8 +59,11 @@ def assessment_report(assment):
     """
     return nicely formated report of given assessment
     """
+    stalest_file, stalest_date = backup_history.get_most_stale_file()
     return (
         "\n"+
+        "=== Backup History ===\n"
+        "\tmost stale file: {} - {}\n".format(stalest_date, stalest_file) + 
         "=== Estimated Throughput Analysis ===\n"
         "\t{} / {} Mb throughput used over {}\n".format(
             assment['throughput_demand'],

@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from croniter import croniter
 
 from backdat.file_parsers import host_settings
+from backdat.file_parsers import fileset
 
 def get_theoretical_assessment(
     assess_window=timedelta(days=30)
@@ -24,8 +25,8 @@ def get_theoretical_assessment(
     logger.debug("theoretical assessement for window " + str(t_0) + " / " + str(t_f))
 
     logger.debug("estimating amount of data we need to push over given window...")
-    # TODO: read file stat history db for these values:
-    throughput_needed = 1000.0  # est Mb needed in given assess_window
+    throughput_needed = fileset.get_upload_size()
+    throughput_needed /= 1.0e6  # b * 1Mb / 1,000,000b  (convert bits to Mbits)
 
     logger.debug("estimating upload speed...")
     # TODO: read resources.json (or history?) for these values:
@@ -46,6 +47,9 @@ def get_theoretical_assessment(
     est_throughput = minutes * upload_speed_Mbpmin  # min * Mb / min = Mb
 
     return {
+        'throughput_demand': throughput_needed,
+        'assessment_timedelta': assess_window,
+        'throughput_supply': est_throughput,
         'coverage': est_throughput / throughput_needed
     }
 
@@ -54,5 +58,10 @@ def assessment_report(assment):
     return nicely formated report of given assessment
     """
     return (
-        "\tcoverage: {}%".format(round(assment['coverage'])*100)
+        "\t {} / {} Mb throughput used over {}\n".format(
+            assment['throughput_demand'],
+            assment['throughput_supply'],
+            assment['assessment_timedelta']
+        ) +
+        "\t\tcoverage: {}%".format(round(assment['coverage'])*100)
     )

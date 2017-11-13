@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import logging
+import platform  # only for platform.node() to get hostname
 
 from croniter import croniter
 
@@ -10,7 +11,6 @@ from backdat.file_parsers import crontab
 # TODO: un-hardcode these
 backdat_exe_path = "/opt/backdat/backdat.py"
 cronjob_log_path = "/var/opt/backdat/cronjob.log"
-hostname = "thing3"
 
 class BackupArgs(object):
     """ basically a dict to pass to the backuper... why didn't I just use a dict? """
@@ -35,6 +35,7 @@ class BackupManager(object):
         """
         self.logger.info(" === START === ")
         try:
+            hostname = platform.node()
             for next_backup in backup_plan.read(hostname):
                 self.set_next_backup(next_backup)
 

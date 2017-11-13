@@ -5,7 +5,9 @@ formatted to match ./docs/example_files/backup-plan.tsv
 
 import warnings
 
-def read(filepath, hostname):
+PLAN_PATH="/var/opt/backdat/backup-plan.tsv"
+
+def read(hostname, filepath=PLAN_PATH):
     """
     reads in a backup plan from file
 

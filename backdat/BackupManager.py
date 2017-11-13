@@ -35,7 +35,7 @@ class BackupManager(object):
         """
         self.logger.info(" === START === ")
         try:
-            for next_backup in BackupManager.load_backup_plan():
+            for next_backup in backup_plan.read(hostname):
                 self.set_next_backup(next_backup)
 
                 if (BackupManager.enough_time_remaining()):
@@ -121,15 +121,3 @@ class BackupManager(object):
                 # self.logger.debug("running until " + str(last_time) + ".")
                 # self.logger.debug("will resume at " + str(next_time))
                 return last_time, next_time
-
-    @staticmethod
-    def load_backup_plan():
-        """
-        loads backup plan actions for this host from file into a list
-        """
-        PLAN_PATH="/var/opt/backdat/backup-plan.tsv"
-        # self.logger.info("loading backup plan from " + PLAN_PATH)
-        return backup_plan.read(
-            PLAN_PATH,  # NOTE:not cross-platform
-            hostname
-        )

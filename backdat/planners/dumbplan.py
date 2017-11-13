@@ -17,7 +17,7 @@ def make_plan():
         for fstat in get_fileset_statlist():   # for every file in fileset
             # plan to back it up on the next run
             timestr = "2222-22-22T22:22:22"
-            hostname = "tylardesk"
+            hostname = "thing3"
             src = hostname +":" + fstat[STAT_KEYS.SOURCE]
 
             trg = "gdrive-ty:/IMARS/backups/backdat/" + fstat[STAT_KEYS.TARGET]

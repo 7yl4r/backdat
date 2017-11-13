@@ -1,0 +1,44 @@
+{
+    "//": [
+        " /etc/opt/backdat/resources.json",
+        "",
+        " This user-facing file defines the resources which can be backed up to. ",
+        "",
+        " This file is global (common accross all hosts). ",
+        "",
+        " name :        human-readable and unique name ",
+        " type :        defines what methods should be used to interface ",
+        " login:        details needed to interface ",
+        " limits:       defines max space & throughput ",
+        " notify_on:    sets up email notifications for events ",
+        " site_groups:  used to group multiple remotes together so that all your backups don't end up in one datacenter ",
+        " safety_rating: used to prioritize backups to minimize chance of loss "
+    ],
+    "resources":[
+        {
+            "name": "tylar's google drive",
+            "type": "gdrive",
+            "login": {
+                "user": "tylar",
+                "pw": "yadayada"
+            },
+            "limits": {
+                "max-usage": "1TB"
+                "claimed": "323.234GB"
+            },
+            "notify_on":{
+                "low_space" = "tylarmurray@mail.usf.edu"
+            },
+            "site_groups": "remote site #1",
+            "safety_rating": "1/1000000000",  # chance of data loss in 1 yr
+        },{
+            "name": "my desktop local storage",
+            "type": "local",    # this is to allow other machines to backup to here
+            "login": { ... },
+            "loc": { "/home/tylar/backup-store/" },
+            "limits": { "max-usage": "100GB"},
+            "site_groups": ["my house", "my desktop"],
+            "safety_rating": "1/100",
+        }
+    ]
+}

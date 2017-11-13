@@ -1,0 +1,38 @@
+{
+  "//": [
+    " /etc/opt/backdat/group_policies.json",
+    "",
+    "This user-facing file defines settings for fileset groups used in fileset.tsv",
+    "",
+    "This file is global (common across all hosts).",
+    "",
+    " name:           unique name of group",
+    " redundancy:     how many copies of this file do we want",
+    " required_sites: force the file to back-up to these locations",
+    " importance:     ordinal rating of how important this group is relative to others. highest is most important",
+    " frequency:      minimum targeted backup frequency {daily, weekly, monthly} (target is 1 backup to one host per (day/week/month)",
+  ],
+  "policies":[
+    "_default": {
+      "redundancy": 2,
+      "importance": 0
+      "frequency": "monthly"
+    },
+    "priority_1":{
+      "redundancy": 4
+      "required_sites": [
+        "tylar's google drive",
+        "my desktop local storage"
+      ],
+      "importance": 100,
+      "frequency": "daily"
+    },
+    "test_group":{
+      "importance": -10,
+    },
+    "priority_2": {
+      "redundancy": 3
+      "importance": 90
+    }
+  ]
+}

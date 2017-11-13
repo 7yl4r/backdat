@@ -1,0 +1,22 @@
+{
+  "//": [
+    "/var/opt/backdat/backup-state.json",
+    " This file shows the state of backups currently, file by file."
+  ]
+  "my_host:/yada/yada.txt": {
+    "current_backups": [
+      "host_1":{
+        "time": "2017-08-09T18:05:01",
+        "hash": "thisISaHASHvalue",
+      },
+      "gdrive":{
+        "time": "2017-06-09T18:05:01",
+        "hash": "thisISaHASHvalue",
+      },
+      "host_2":{
+        "time": "2017-08-10T19:12:21",
+        "hash": "thisIs_a_different-HASHvalue",
+      }
+    ]
+  }...
+}

@@ -1,0 +1,8 @@
+# /var/opt/backdat/backup-history.log
+#
+# This user-facing file is a history of items that have been backed up.
+#
+# there should be a local version of this file and a global version which contains history from all hosts.
+#
+# start-time      size  time  source                                  target
+2017-08-01T15:28 123kb 23s host_one:/opt/gdrive-backuper/example/my-file.txt gdrive-ty:IMARS/backups/test/backuper/

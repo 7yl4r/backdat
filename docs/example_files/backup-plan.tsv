@@ -1,0 +1,16 @@
+# /var/opt/backdat/backup-plan
+#
+# The generated backup plan file defines the tentative backup plan from given settings, files, and remotes.
+# This plan will change after each backup as more information is aquired about the current state of backups and the remotes.
+# This file resembles the backup log.
+#
+# This is a global file that must be synced across all hosts so that the plan can be modified.
+#
+# Entries are cronological.
+#
+# Only advanced users will be reading this file.
+
+2017-10-13T11:12:13	my_host:/my/file/location	my_remote:/remote/file/location
+2017-10-13T11:12:32	my_host:/my/file/location2	my_remote:/remote/file/location
+2017-10-13T11:20:22	my_host:/my/file/location3	my_other_remote:/remote/file/location
+2017-10-13T11:20:22	my_2nd_host:/filepath	my_remote:/remote/file/location

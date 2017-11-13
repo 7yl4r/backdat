@@ -1,0 +1,20 @@
+# /etc/opt/backdat/fileset.tsv
+#
+# Files is a user-facing file to list local files or dirs that you want backed up.
+#
+# This represents the local version of this unique to each host.
+# A global version would look similar but would need to include hostname.
+#
+# values are separated by a tab character spaces are trimmed from edges
+#
+# file	                                         group
+
+# individual files:
+/opt/gdrive-backuper/example/my-file.txt	priority_1
+/opt/gdrive-backuper/example/test file with spaces.txt	test_group
+
+# upload all files in directory	individually:
+/opt/gdrive-backuper/example/*	priority_1
+
+# upload directory all at once:
+/opt/gdrive-backuper/example	priority_2

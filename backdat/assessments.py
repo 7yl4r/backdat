@@ -63,7 +63,7 @@ def assessment_report(assment):
     return (
         "\n"+
         "=== Backup History ===\n"
-        "\tmost stale file: {} - {}\n".format(stalest_date, stalest_file) + 
+        "\tmost stale file: {} - {}\n".format(stalest_date.strftime(backup_history.TIME_FORMAT), stalest_file) + 
         "=== Estimated Throughput Analysis ===\n"
         "\t{} / {} Mb throughput used over {}\n".format(
             assment['throughput_demand'],

@@ -7,6 +7,7 @@ from datetime import datetime
 from backdat.file_parsers.fileset import get_fileset_statlist, STAT_KEYS
 
 DEFAULT_PATH = "/var/opt/backdat/backup-history.log"
+TIME_FORMAT = "%Y-%m-%d %H:%M"
 
 def log_backup_action(action, logpath=DEFAULT_PATH):
     """
@@ -20,7 +21,7 @@ def log_backup_action(action, logpath=DEFAULT_PATH):
     current_time = datetime.now()
     with open(logpath, 'a') as logfile:
         logfile.write("\t".join([
-            str(current_time),
+            current_time.strftime(TIME_FORMAT),
             action.source,
             action.target + "\n"
         ]))
@@ -33,7 +34,7 @@ def get_most_stale_file(logpath=DEFAULT_PATH):
     oldest_name = ""
     oldest_date = datetime.max
     for fstat in get_fileset_statlist():
-        last_backup = datetime.strptime(get_last_upload_time(fstat[STAT_KEYS.SOURCE]), "%Y-%m-%d %H:%M:%S.%f")
+        last_backup = datetime.strptime(get_last_upload_time(fstat[STAT_KEYS.SOURCE]), TIME_FORMAT)
         if last_backup < oldest_date:
             oldest_date = last_backup
             oldest_name = fstat[STAT_KEYS.SOURCE]

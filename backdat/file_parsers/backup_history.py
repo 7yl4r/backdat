@@ -20,6 +20,20 @@ def log_backup_action(action, logpath=DEFAULT_PATH):
         logfile.write("\t".join([
             str(current_time),
             action.source,
-            action.target,
-            "\n"
+            action.target + "\n"
         ]))
+
+def get_last_upload_time(filename, logpath=DEFAULT_PATH):
+    """
+    returns the last time given filename was uploaded,
+    assumes backup file has cronological entries.
+    assumes we can fit the whole backup log into memory.
+    """
+    with open(logpath, 'r') as logfile:
+        for line in reversed(list(logfile.readlines())):
+            time, src, path = line.split("\t")
+            if src == filename:
+                return time
+        else:
+            # file has never been backed up, return the dawn of time
+            return str(datetime.min)

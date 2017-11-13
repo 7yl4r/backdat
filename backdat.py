@@ -4,7 +4,7 @@
 from argparse import ArgumentParser
 import logging
 
-from backdat.main import backup, status, plan
+from backdat.main import backup, status, plan, check
 
 if __name__ == "__main__":
     # === set up arguments
@@ -31,6 +31,10 @@ if __name__ == "__main__":
 
     parser_plan = subparsers.add_parser('plan', help='generate backup plan')
     parser_plan.set_defaults(func=plan)
+
+    parser_check = subparsers.add_parser('check', help='show last upload of a specific file')
+    parser_check.add_argument('filename', type=str, help='name of the file to check')
+    parser_check.set_defaults(func=check)
 
     args = parser.parse_args()
 

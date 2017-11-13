@@ -37,7 +37,9 @@ def read(filepath, hostname):
                 ))
     return plan
 
-def write(filepath):
-    """ writes a backup plan to file """
+def add_line(plan_line, filepath):
+    """ writes a line  to the backup plan
+    if a line that is similar enough matches this line, that line is replaced
+    """
     # TODO
     return

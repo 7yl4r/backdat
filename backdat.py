@@ -4,7 +4,7 @@
 from argparse import ArgumentParser
 import logging
 
-from backdat.main import backup, status
+from backdat.main import backup, status, plan
 
 if __name__ == "__main__":
     # === set up arguments
@@ -28,6 +28,9 @@ if __name__ == "__main__":
 
     parser_backup = subparsers.add_parser('backup', help='try backing up right now')
     parser_backup.set_defaults(func=backup)
+
+    parser_plan = subparsers.add_parser('plan', help='generate backup plan')
+    parser_plan.set_defaults(func=plan)
 
     args = parser.parse_args()
 

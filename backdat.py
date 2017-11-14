@@ -3,6 +3,7 @@
 """ example main file with cmd line interface """
 from argparse import ArgumentParser
 import logging
+from logging.handlers import RotatingFileHandler
 
 from backdat.main import backup, status, plan, check
 from backdat.DuplicateLogFilter import DuplicateLogFilter
@@ -63,23 +64,23 @@ if __name__ == "__main__":
     stream_handler.setLevel(_level)
     stream_handler.setFormatter(formatter)
     stream_handler.addFilter(DuplicateLogFilter())
-    #
-    # file_handler = logging.RotatingFileHandler(
-    #    'hello.log', maxBytes=1e6, backupCount=5
-    # )
-    # file_handler.setLevel(logging.INFO)
-    # file_handler.setFormatter(formatter)
-    # file_hanlder.addFilter(DuplicateLogFilter())
-    #
+
+    file_handler = RotatingFileHandler(
+       '/var/opt/backdat/backdat.log', maxBytes=1e6, backupCount=5
+    )
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    file_handler.addFilter(DuplicateLogFilter())
+
     # === add the handlers (if any) to the logger
     _handlers = [
-        stream_handler
-        #file_handler
+        stream_handler,
+        file_handler
     ]
 
     logging.basicConfig(
         handlers=_handlers,
-        level=_level  # this must be set to lowest of all levels used in handlers
+        level=logging.DEBUG  # this must be set to lowest of all levels used in handlers
     )
     # =========================================================================
 

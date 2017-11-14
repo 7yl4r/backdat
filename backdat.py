@@ -54,7 +54,7 @@ if __name__ == "__main__":
     # === (optional) create custom logging format(s)
     # https://docs.python.org/3/library/logging.html#logrecord-attributes
     formatter = logging.Formatter(
-       '%(asctime)s|%(name)s\t|%(levelname)s\t|%(message)s'
+       '%(asctime)s|%(levelname)s\t|%(filename)s:%(lineno)s\t|%(message)s'
     )
 
     # === (optional) create handlers
@@ -69,6 +69,7 @@ if __name__ == "__main__":
     # )
     # file_handler.setLevel(logging.INFO)
     # file_handler.setFormatter(formatter)
+    # file_hanlder.addFilter(DuplicateLogFilter())
     #
     # === add the handlers (if any) to the logger
     _handlers = [

@@ -63,14 +63,14 @@ def assessment_report(assment):
     return (
         "\n"+
         "=== Backup History ===\n"
-        "\tmost stale file: {} - {}\n".format(stalest_date.strftime(backup_history.TIME_FORMAT), stalest_file) + 
+        "\tmost stale file: {} - {}\n".format(stalest_date.strftime(backup_history.TIME_FORMAT), stalest_file) +
         "=== Estimated Throughput Analysis ===\n"
-        "\t{} / {} Mb throughput used over {}\n".format(
-            assment['throughput_demand'],
-            assment['throughput_supply'],
+        "\t{} / {} Tb throughput used over {}\n".format(
+            round(assment['throughput_demand']/1e6),
+            round(assment['throughput_supply']/1e6),
             assment['assessment_timedelta']
         ) +
-        "\tcoverage: {}%".format(round(assment['coverage'])*100) +
+        "\tcoverage: {}%".format(round(assment['coverage']*100.0)) +
         "\n"+
         "=== Backup Scheduling ===\n" +
         "\t" + crontab.get_next_cron_report() +

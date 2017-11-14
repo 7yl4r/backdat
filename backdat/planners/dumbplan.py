@@ -28,8 +28,8 @@ def make_plan():
 
             trg = (  # TODO: replace hardcoded target with read from resources.json
                 "gdrive-ty:/IMARS/backups/backdat/" +
-                str(month) + "/" +
                 hostname +
                 fstat[STAT_KEYS.SOURCE]
+                # + "/" + str(month)
             )
             planfile.write("\t".join([timestr, src, trg]) + "\n")

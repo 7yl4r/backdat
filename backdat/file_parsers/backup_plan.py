@@ -3,7 +3,7 @@ basic reading & writing of backup plan files
 formatted to match ./docs/example_files/backup-plan.tsv
 """
 
-import warnings
+import logging
 
 PLAN_PATH="/var/opt/backdat/backup-plan.tsv"
 
@@ -15,6 +15,7 @@ def read(hostname, filepath=PLAN_PATH):
     hostname : str
         limit returned object to plans for this host only
     """
+    logger = logging.getLogger(__file__)
     plan = list()
 
     with open(filepath, 'r') as planfile:
@@ -34,9 +35,10 @@ def read(hostname, filepath=PLAN_PATH):
                     if hostname == line_hostname:
                         plan.append({"source": path, "target": target})
             except ValueError as v_err:
-                warnings.warn("\nWARN: Parse error ({})\n\t@ {} L{} :\n'''\n{}'''\n".format(
+                logger.critical("Parse error ({})\n\t@ {} L{} :\n'''\n{}'''\n".format(
                     v_err, filepath, i, line
                 ))
+    logger.info(str(len(plan)) + " plans read from file")
     return plan
 
 def add_line(plan_line, filepath):

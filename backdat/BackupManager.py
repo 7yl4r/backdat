@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 import logging
-import platform  # only for platform.node() to get hostname
 
 from croniter import croniter
 
@@ -8,6 +7,7 @@ from backdat.RemoteInterface import rclone
 from backdat.file_parsers import backup_plan, host_settings
 from backdat.file_parsers import crontab
 from backdat.file_parsers import backup_history
+from backdat.util.get_hostname import get_hostname
 
 class BackupArgs(object):
     """ basically a dict to pass to the backuper... why didn't I just use a dict? """
@@ -32,7 +32,7 @@ class BackupManager(object):
         """
         self.logger.info(" === START === ")
         try:
-            hostname = platform.node()
+            hostname = get_hostname()
             for next_backup in backup_plan.read(hostname):
                 self.set_next_backup(next_backup)
 
@@ -93,30 +93,38 @@ class BackupManager(object):
         dtime : datetime
         windowstr : str
         """
+        logger = logging.getLogger(__file__)
         window_end, next_window = BackupManager.get_window_edges(windowstr)
         if dtime < window_end:
+            logger.debug(str(dtime) + " is inside the window")
             return True
         else:
+            logger.debug(str(dtime) + " is after end of window")
             return False
 
     @staticmethod
     def get_window_edges( windowstr):
         """
-        return datetime of the end given backup window
+        return datetime of the end current backup window
         and the datetime of the start of the next window
         """
-        # threshold should be << than window width, but > cron granularity
-        # this method assumes that the cron string minutes column is *, ie
-        # cron granularity is 1min and min window width is 1hr.
-        threshold = timedelta(minutes=2)
+        logger = logging.getLogger(__file__)
 
-        last_time = datetime.now()
-        window_iter = croniter(windowstr, last_time)
-        while(True):
-            next_time = window_iter.get_next(datetime)
-            if next_time - last_time < threshold:
-                last_time = next_time
-            else:
-                # self.logger.debug("running until " + str(last_time) + ".")
-                # self.logger.debug("will resume at " + str(next_time))
-                return last_time, next_time
+        if windowstr == "* * * * *":
+            logger.warn("Attempting to calculate edge of infinite window!")
+            return datetime.max, datetime.now() + timedelta(hours=1)
+        else:
+            last_time = datetime.now()
+            # threshold should be << than window width, but > cron granularity
+            # this method assumes that the cron string minutes column is *, ie
+            # cron granularity is 1min and min window width is 1hr.
+            threshold = timedelta(minutes=2)
+            window_iter = croniter(windowstr, last_time)
+            while(True):
+                next_time = window_iter.get_next(datetime)
+                if next_time - last_time < threshold:
+                    last_time = next_time
+                else:
+                    logger.debug("running until  " + str(last_time))
+                    logger.debug("will resume at " + str(next_time))
+                    return last_time, next_time

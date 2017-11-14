@@ -7,7 +7,9 @@ import logging
 from backdat.main import backup, status, plan, check
 
 if __name__ == "__main__":
+    # =========================================================================
     # === set up arguments
+    # =========================================================================
     parser = ArgumentParser(description='declarative backup manager')
 
     parser.add_argument("-v", "--verbose", help="increase output verbosity",
@@ -37,24 +39,45 @@ if __name__ == "__main__":
     parser_check.set_defaults(func=check)
 
     args = parser.parse_args()
-
-    # === set up logging behavior
+    # =========================================================================
+    # === set up default logging behavior
+    # =========================================================================
+    # === convert -v, -vv, -vvv, etc into logging levels
     if (args.verbose == 0):
-        logging.basicConfig(level=logging.WARNING)
+        _level=logging.WARNING
     elif (args.verbose == 1):
-        logging.basicConfig(level=logging.INFO)
+        _level=logging.INFO
     else: #} (args.verbose == 2){
-        logging.basicConfig(level=logging.DEBUG)
+        _level=logging.DEBUG
 
-    # # (optional) create a file handler
-    # handler = logging.FileHandler('hello.log')
-    # handler.setLevel(logging.INFO)
-    #
-    # # (optional) create a custom logging format
-    # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    # handler.setFormatter(formatter)
-    #
-    # # (optional) add the handlers (if any) to the logger
-    # logger.addHandler(handler)
+    # === (optional) create custom logging format(s)
+    # https://docs.python.org/3/library/logging.html#logrecord-attributes
+    formatter = logging.Formatter(
+       '%(asctime)s|%(name)s\t|%(levelname)s\t|%(message)s'
+    )
 
+    # === (optional) create handlers
+    # https://docs.python.org/3/howto/logging.html#useful-handlers
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(_level)
+    stream_handler.setFormatter(formatter)
+    #
+    # file_handler = logging.RotatingFileHandler(
+    #    'hello.log', maxBytes=1e6, backupCount=5
+    # )
+    # file_handler.setLevel(logging.INFO)
+    # file_handler.setFormatter(formatter)
+    #
+    # === add the handlers (if any) to the logger
+    _handlers = [
+        stream_handler
+        #file_handler
+    ]
+
+    logging.basicConfig(
+        handlers=_handlers
+    )
+    # =========================================================================
+
+    # call the appropriate subcommand function
     args.func(args)

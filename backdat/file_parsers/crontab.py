@@ -34,14 +34,17 @@ def get_next_cron_report():
     """
     returns pretty printout describing next job scheduled with cron
     """
-    with open(CRON_FILE_PATH, 'r') as cfile:
-        for line in cfile:
-            if line.startswith("#"):
-                pass
-            else:
-                crstr = line.split(" ")[0:5]
-                # rt = line.split(" ")[6]
-                # exepath = line.split(" ")[7]
-                # args = line.split(" ")[8:]
-                next_backup = datetime.strptime(" ".join(crstr), CRON_TIME_FMT)
-                return "next backup: " + next_backup.strftime("%m-%d %H:%M")
+    try:
+        with open(CRON_FILE_PATH, 'r') as cfile:
+            for line in cfile:
+                if line.startswith("#"):
+                    pass
+                else:
+                    crstr = line.split(" ")[0:5]
+                    # rt = line.split(" ")[6]
+                    # exepath = line.split(" ")[7]
+                    # args = line.split(" ")[8:]
+                    next_backup = datetime.strptime(" ".join(crstr), CRON_TIME_FMT)
+                    return "next backup: " + next_backup.strftime("%m-%d %H:%M")
+    except FileNotFoundError as f_err:
+        return "No backup scheduled (cron.d/backdat not found)"

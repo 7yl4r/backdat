@@ -9,10 +9,6 @@ from backdat.file_parsers import backup_plan, host_settings
 from backdat.file_parsers import crontab
 from backdat.file_parsers import backup_history
 
-# TODO: un-hardcode these
-backdat_exe_path = "/opt/backdat/backdat.py"
-cronjob_log_path = "/var/opt/backdat/cronjob.log"
-
 class BackupArgs(object):
     """ basically a dict to pass to the backuper... why didn't I just use a dict? """
     source = "/opt/backdat/backdat.py"

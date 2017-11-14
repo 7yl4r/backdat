@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 import logging
 
 from backdat.main import backup, status, plan, check
+from backdat.DuplicateLogFilter import DuplicateLogFilter
 
 if __name__ == "__main__":
     # =========================================================================
@@ -61,6 +62,7 @@ if __name__ == "__main__":
     stream_handler = logging.StreamHandler()
     stream_handler.setLevel(_level)
     stream_handler.setFormatter(formatter)
+    stream_handler.addFilter(DuplicateLogFilter())
     #
     # file_handler = logging.RotatingFileHandler(
     #    'hello.log', maxBytes=1e6, backupCount=5

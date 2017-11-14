@@ -78,7 +78,8 @@ if __name__ == "__main__":
     ]
 
     logging.basicConfig(
-        handlers=_handlers
+        handlers=_handlers,
+        level=_level  # this must be set to lowest of all levels used in handlers
     )
     # =========================================================================
 

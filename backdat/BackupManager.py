@@ -8,6 +8,8 @@ from backdat.file_parsers import backup_plan, host_settings
 from backdat.file_parsers import crontab
 from backdat.file_parsers import backup_history
 from backdat.util.get_hostname import get_hostname
+from backdat.planners.util import make_plan_line
+from backdat.planners.dumbplan import make_plan
 
 class BackupArgs(object):
     """ basically a dict to pass to the backuper... why didn't I just use a dict? """
@@ -18,6 +20,14 @@ class BackupArgs(object):
     rclonelog = None
     window = "24h"
     verbose = 0
+
+    def get_plan_line(self):
+        """
+        convert BackupManger.BackupArgs object into string matching the
+        format of a line in backup_plan.tsv
+        """
+        time_string = "2222-22-22T22:22:22"  # TODO: somehow use real time here?
+        return make_plan_line(time_string, get_hostname() + ":" + self.source, self.target)
 
 class BackupManager(object):
     """ BackupManager manages backing up of files in a backup session """
@@ -43,6 +53,8 @@ class BackupManager(object):
                     break
             else:
                 self.logger.warn("Finished all backups with time to spare!")
+                # re-plan?
+                make_plan()
         # schedule next run of BackupManager in crontab & exit
         finally:
             winend, next_scheduled_time = BackupManager.get_window_edges(
@@ -60,7 +72,7 @@ class BackupManager(object):
         """
         self.logger.info("starting next backup action...")
         rclone.backup(self.next_backup_args)
-        # TODO: backup_plan.remove_completed_action(self.next_backup_args)
+        backup_plan.remove_completed_action(self.next_backup_args)
         backup_history.log_backup_action(self.next_backup_args)
 
     def set_next_backup(self, backup_dict):

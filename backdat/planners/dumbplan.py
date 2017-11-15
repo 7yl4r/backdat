@@ -8,6 +8,7 @@ from datetime import datetime
 from backdat.file_parsers.fileset import get_fileset_statlist, STAT_KEYS
 from backdat.file_parsers import backup_plan
 from backdat.util.get_hostname import get_hostname
+from backdat.planners.util import make_plan_line
 
 def make_plan():
     # the target path is built using the current month for additional
@@ -32,4 +33,4 @@ def make_plan():
                 fstat[STAT_KEYS.SOURCE]
                 # + "/" + str(month)
             )
-            planfile.write("\t".join([timestr, src, trg]) + "\n")
+            planfile.write(make_plan_line(timestr, src, trg))

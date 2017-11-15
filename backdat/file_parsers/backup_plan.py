@@ -42,13 +42,6 @@ def read(hostname, filepath=PLAN_PATH):
     logger.info(str(len(plan)) + " plans read from file")
     return plan
 
-def add_line(plan_line, filepath):
-    """ writes a line  to the backup plan
-    if a line that is similar enough matches this line, that line is replaced
-    """
-    # TODO
-    return
-
 def trim_time_column(line):
     """
     trims the time column off the front of the given line from backup plan file.

@@ -4,6 +4,7 @@ formatted to match ./docs/example_files/backup-plan.tsv
 """
 
 import logging
+import os
 
 PLAN_PATH="/var/opt/backdat/backup-plan.tsv"
 
@@ -47,3 +48,16 @@ def add_line(plan_line, filepath):
     """
     # TODO
     return
+
+def remove_completed_action(backup_args):
+    """
+    removes line from backup plan (because it has been completed)
+    """
+    line_to_remove = "TODO TODO TODO"
+    TMP_PATH=PLAN_PATH+".tmp"
+    with open(PLAN_PATH, 'r') as planfile:
+        with open(TMP_PATH, 'wb') as tmpfile:
+            for line in planfile:
+                if line != line_to_remove:
+                    tmpfile.write(line)
+    os.replace(TMP_PATH, PLAN_PATH)  # new in python v 3.3

@@ -60,6 +60,7 @@ class BackupManager(object):
         """
         self.logger.info("starting next backup action...")
         rclone.backup(self.next_backup_args)
+        # TODO: backup_plan.remove_completed_action(self.next_backup_args)
         backup_history.log_backup_action(self.next_backup_args)
 
     def set_next_backup(self, backup_dict):

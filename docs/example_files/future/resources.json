@@ -23,17 +23,19 @@
                 "pw": "yadayada"
             },
             "limits": {
-                "max-usage": "1TB"
+                "max-usage": "1TB",
                 "claimed": "323.234GB"
             },
             "notify_on":{
-                "low_space" = "tylarmurray@mail.usf.edu"
+                "low_space": "tylarmurray@mail.usf.edu"
             },
             "site_groups": "remote site #1",
-            "safety_rating": "1/1000000000",  # chance of data loss in 1 yr
+            "//": "safety_rating is chance of data loss in 1 yr",
+            "safety_rating": "1/1000000000",
         },{
             "name": "my desktop local storage",
-            "type": "local",    # this is to allow other machines to backup to here
+            "//": "this is to allow other machines to backup to here",
+            "type": "local",
             "login": { ... },
             "loc": { "/home/tylar/backup-store/" },
             "limits": { "max-usage": "100GB"},

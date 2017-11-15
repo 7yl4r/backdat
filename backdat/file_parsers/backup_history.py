@@ -35,7 +35,10 @@ def get_most_stale_file(logpath=DEFAULT_PATH):
     oldest_name = ""
     oldest_date = datetime.max
     for fstat in get_fileset_statlist():
-        last_backup = datetime.strptime(get_last_upload_time(fstat[STAT_KEYS.SOURCE]), TIME_FORMAT)
+        last_backup = datetime.strptime(
+            get_last_upload_times(fstat[STAT_KEYS.SOURCE], n_times=1)[0],
+            TIME_FORMAT
+        )
         if last_backup < oldest_date:
             oldest_date = last_backup
             oldest_name = fstat[STAT_KEYS.SOURCE]
@@ -53,22 +56,38 @@ def get_dawn_of_time():
     """
     return datetime.strftime(datetime.min.replace(year=1000), TIME_FORMAT)
 
-def get_last_upload_time(filename, logpath=DEFAULT_PATH):
+def get_last_upload_times(filename, n_times=1, logpath=DEFAULT_PATH):
     """
-    returns the last time given filename was uploaded,
+    returns list of the last n_times backups
     assumes backup file has cronological entries.
     assumes we can fit the whole backup log into memory.
     """
     logger = logging.getLogger(__name__)
     try:
+        times = []
         with open(logpath, 'r') as logfile:
             for line in reversed(list(logfile.readlines())):
                 time, src, path = line.split("\t")
                 if src == filename:
-                    return time
+                    times.append(time)
+                    if len(times) == n_times:
+                        break
             else:
-                # file has never been backed up, return the dawn of time
-                return get_dawn_of_time()
+                logger.warn("not enough backups in history for: " + filename)
+        logger.debug("found " + str(len(times)) + " past backups for " + filename)
+        while len(times) < n_times:
+            # append dawn of time for non-existent entries
+            times.append(get_dawn_of_time())
+        return times
     except FileNotFoundError as f_err:
         logger.warn("No backup history found")
-        return get_dawn_of_time()
+        return [get_dawn_of_time()]*n_times
+
+def get_backup_frequency(n_backups_to_check):
+    """
+    checks for repeated backups in history and calculates frequency using at
+    most the last n_backups_to_check.
+    """
+    # TODO: for each file (or maybe just a few of them to save time)
+    # TODO: get a list of the last backup times
+    # TODO: calculate avg frequency of backups using last n_backups_to_check

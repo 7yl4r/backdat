@@ -2,7 +2,7 @@
 This user-facing file is a history of items that have been backed up.
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 
 from backdat.file_parsers.fileset import get_fileset_statlist, STAT_KEYS
@@ -83,11 +83,41 @@ def get_last_upload_times(filename, n_times=1, logpath=DEFAULT_PATH):
         logger.warn("No backup history found")
         return [get_dawn_of_time()]*n_times
 
-def get_backup_frequency(n_backups_to_check):
+def sum_avg_timedeltas(timedelts):
+    """
+    returns sum & average of given list of timedeltas because sum() and
+    statistics.mean doen't handle timedeltas.
+    """
+    delt_sum = timedelta(0)
+    for tdelt in timedelts:
+        delt_sum += tdelt
+    delt_avg = delt_sum / len(timedelts)
+
+    return delt_sum, delt_avg
+
+def get_backup_period_stats(n_backups_to_check):
     """
     checks for repeated backups in history and calculates frequency using at
     most the last n_backups_to_check.
     """
-    # TODO: for each file (or maybe just a few of them to save time)
-    # TODO: get a list of the last backup times
-    # TODO: calculate avg frequency of backups using last n_backups_to_check
+    # collect frequency information for each file
+    period_sums = []
+    period_maxs = []
+    period_mins = []
+    period_avgs = []
+    for fstat in get_fileset_statlist(): # TODO: maybe do just a few of them to save time
+        last_uploads = get_last_upload_times(fstat[STAT_KEYS.SOURCE], n_times=n_backups_to_check)
+        last_uploads = list(map(lambda x: datetime.strptime(x, TIME_FORMAT), last_uploads))
+        timedeltas = [
+            last_uploads[i-1]-last_uploads[i] for i in range(1, len(last_uploads))
+        ]
+
+        tdelt_sum, tdelt_avg = sum_avg_timedeltas(timedeltas)
+        period_sums.append(tdelt_sum)
+        period_avgs.append(tdelt_avg)
+        period_maxs.append(max(timedeltas))
+        period_mins.append(min(timedeltas))
+
+    # summarize information across all files
+    net_avgs_sum, net_avgs_avg = sum_avg_timedeltas(period_avgs)
+    return net_avgs_avg, min(period_mins), max(period_maxs)

@@ -60,10 +60,13 @@ def assessment_report(assment):
     return nicely formated report of given assessment
     """
     stalest_file, stalest_date = backup_history.get_most_stale_file()
+    period_avg, period_min, period_max = backup_history.get_backup_period_stats(3)
     return (
         "\n"+
         "=== Backup History ===\n"
         "\tmost stale file: {} - {}\n".format(stalest_date.strftime(backup_history.TIME_FORMAT), stalest_file) +
+        "\tbackup frequency avg 1/{}\n".format(period_avg) +
+        "\tbackup frequency range 1/{} - 1/{}\n".format(period_min, period_max) + 
         "=== Estimated Throughput Analysis ===\n"
         "\t{} / {} Tb throughput used over {}\n".format(
             round(assment['throughput_demand']/1e6),

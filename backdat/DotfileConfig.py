@@ -6,7 +6,7 @@ configuration as specified by dotfiles (system and local), similar to git
 import os
 import json
 
-CFGNAME = '.backupconfig'
+CFGNAME = '.backdatconfig'
 
 # logger = logging.getLogger('gdrive_backuper.dotfileconfig')
 # logger.setLevel(logging.DEBUG)

@@ -1,0 +1,11 @@
+{
+    "//": [
+        ".backdatconfig files are used to configure pre- & post-backup jobs."
+    ],
+    "pre":[
+        "virsh suspend $filename"
+    ],
+    "post":[
+        "virsh resume $filename"
+    ]
+}

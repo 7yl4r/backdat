@@ -16,21 +16,23 @@ except ImportError:
 # dependencies:
 from backdat import DotfileConfig
 
+SAMPLE_FILES_DIR="/opt/backdat/docs/example_files"
+
 class Test_dotfile_config_loader(TestCase):
 
     # tests:
     #########################
     def test_get_local_config_file_on_example_dir(self):
-        """ get_local_config_file using included example .backupconfig """
-        src = '/opt/gdrive-backuper/example'
+        """ get_local_config_file using included example .backdatconfig """
+        src = SAMPLE_FILES_DIR
         result = DotfileConfig.get_local_config_file(src)
 
         self.assertEqual(result, src + '/'+DotfileConfig.CFGNAME)
 
     def test_get_local_config_file_on_example_file(self):
-        """ get_local_config_file using included example .backupconfig dir """
-        srcdir = '/opt/gdrive-backuper/example'
-        srcfile = '/my-file.txt'
+        """ get_local_config_file using included example .backdatconfig dir """
+        srcdir = SAMPLE_FILES_DIR
+        srcfile = '/README.md'
         src = srcdir + srcfile
         result = DotfileConfig.get_local_config_file(src)
 

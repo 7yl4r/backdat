@@ -17,3 +17,14 @@ A backup plan is generated according to information given about your fileset, ba
 
 If you change your fileset, you will need to run `plan` again.
 To check on your backups do `sudo /opt/backdat/backdat.py status` at any time.
+
+## pre & post backup hooks with .backdatconfig
+Commands can be run before or after the backup of a file.
+One example usage is to pause a VM during the backup and resume on completion.
+These pre & post hooks are controlled by adding a json .backdatconfig file to the directory you wish to hook.
+See `./docs/example_files/.backdatconfig` for an example.
+
+Bash commands that are allowed are listed in `ProcessWrapHandler.allowed_bash_cmds`.
+Variables can be used in backup commands (actually just one for now):
+
+* `$filename` - the name of the file being backed up

@@ -7,7 +7,7 @@ from datetime import datetime
 
 BACKDAT_PATH = "/opt/backdat/backdat.py"
 CRON_FILE_PATH = "/etc/cron.d/backdat"  # NOTE: not cross-platform
-CRON_TIME_FMT = "%M %H %d %m %w"
+CRON_TIME_FMT = "%M %H * * *" # %d %m %w"
 
 def write_crontab(time_to_schedule):
     """

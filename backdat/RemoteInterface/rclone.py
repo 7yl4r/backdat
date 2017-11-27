@@ -44,7 +44,11 @@ def backup(args):
     """
     logger = logging.getLogger(__file__)
     logger.info('starting backuper...')
-    logfile_handler = logging.FileHandler(args.log)
+
+    logfile_handler = logging.RotatingFileHandler(
+       args.backuper_log, maxBytes=1e6, backupCount=5
+    )
+
     #logfile_handler.setLevel(logging.DEBUG)
     log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     logfile_handler.setFormatter(log_formatter)
@@ -89,7 +93,7 @@ def backup(args):
         # logger.info('rclone exit w/ code ' + str(res.returncode))
 
     logger.info('starting post-job hooks...')
-    process_handler.post(args.log)
+    process_handler.post(args.backuper_log)
 
     # status=`$RCLONE -v --modify-window 672h --config=$CFG sync $CP_FROM $CP_TARGET | tee /dev/fd/5 | tail -200`
 

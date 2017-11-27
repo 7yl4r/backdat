@@ -15,7 +15,7 @@ class BackupArgs(object):
     """ basically a dict to pass to the backuper... why didn't I just use a dict? """
     source = "/opt/backdat/backdat.py"
     target = "gdrive-ty:/IMARS/backups/test/"
-    log = "/var/opt/backdat/backup.log"
+    backuper_log = "/var/opt/backdat/backup.log"
     summarylog = "/var/opt/backdat/summary.log"
     rclonelog = None
     window = "24h"

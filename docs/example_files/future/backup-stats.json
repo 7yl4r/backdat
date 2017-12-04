@@ -1,0 +1,9 @@
+{
+  "//": [
+    "/var/opt/backdat/backup-stats.json",
+    " Shows running stats kept on the current host's backup history."
+  ],
+  "total_upload_bytes": 12345678,
+  "total_upload_files": 123,
+  "total_actions_completed": 234
+}

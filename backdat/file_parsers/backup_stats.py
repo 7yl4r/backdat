@@ -5,8 +5,8 @@ import logging
 DEFAULT_STATS_PATH="/var/opt/backdat/backup-stats.json"
 
 class KEYS:
-    BYTES_UPLOADED='bytes_uploaded'
-    ACTIONS_COMPLETED='actions_completed'
+    BYTES_UPLOADED='backdat.bytes_uploaded'
+    ACTIONS_COMPLETED='backdat.actions_completed'
 
 def update_stats(completed_action, filepath=DEFAULT_STATS_PATH):
     """

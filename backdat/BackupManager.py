@@ -7,12 +7,13 @@ from backdat.RemoteInterface import rclone
 from backdat.file_parsers import backup_plan, host_settings
 from backdat.file_parsers import crontab
 from backdat.file_parsers import backup_history
+from backdat.file_parsers import backup_stats
 from backdat.util.get_hostname import get_hostname
 from backdat.planners.util import make_plan_line
 from backdat.planners.dumbplan import make_plan
 
 class BackupArgs(object):
-    """ basically a dict to pass to the backuper... why didn't I just use a dict? """
+    """ basically a dict to pass to the back up driver (RemoteInterface)... why didn't I just use a dict? """
     source = "/opt/backdat/backdat.py"
     target = "gdrive-ty:/IMARS/backups/test/"
     backuper_log = "/var/opt/backdat/backup.log"
@@ -72,6 +73,7 @@ class BackupManager(object):
         """
         self.logger.info("starting next backup action...")
         rclone.backup(self.next_backup_args)
+        backup_stats.update_stats(self.next_backup_args)
         backup_plan.remove_completed_action(self.next_backup_args)
         backup_history.log_backup_action(self.next_backup_args)
 

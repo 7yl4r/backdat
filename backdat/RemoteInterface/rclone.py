@@ -1,6 +1,7 @@
 # === built-in imports
 import argparse
 import logging
+from logging.handlers import RotatingFileHandler
 import subprocess
 import sys
 import os
@@ -9,17 +10,18 @@ import re
 # === import dependencies
 # NONE (yet...)
 
+# === imports from this package
+from backdat.ProcessWrapHandler import ProcessWrapHandler
+from backdat.DotfileConfig import DotfileConfig
+
 # === global vars
 MY_PATH    = '/var/opt/backdat/'
 RCLONE     = "rclone"
 RCLONE_CFG = MY_PATH + "rclone.conf"
 
-if not MY_PATH in sys.path:  # TODO: rm
+if not MY_PATH in sys.path:  # TODO: rm this
     sys.path.append(MY_PATH)
 
-# === imports from this package
-from backdat.ProcessWrapHandler import ProcessWrapHandler
-from backdat.DotfileConfig import DotfileConfig
 
 def build_rclone_cmd(args):
     """
@@ -45,7 +47,7 @@ def backup(args):
     logger = logging.getLogger(__file__)
     logger.info('starting backuper...')
 
-    logfile_handler = logging.RotatingFileHandler(
+    logfile_handler = RotatingFileHandler(
        args.backuper_log, maxBytes=1e6, backupCount=5
     )
 

@@ -36,16 +36,31 @@ class ProcessWrapHandler(object):
             if cmd in allowed_bash_cmds:
                 bash_task = task.replace('$filename', self.filename)
 
-                res = subprocess.run(bash_task,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT,
-                    universal_newlines=True,
-                    shell=True
-                )
-                self.logger.debug(res.args)
+                try: # subprocess.run was added in python3.5
+                    res = subprocess.run(bash_task,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        universal_newlines=True,
+                        shell=True
+                    )
+                    stdout = res.stdout
+                except AttributeError as a_err: # this means python < v3.5
+                    # fall back to subprocess.call
+                    # https://docs.python.org/3/library/subprocess.html#call-function-trio
+                    try:
+                        stdout = subprocess.check_output(bash_task,
+                            # stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            universal_newlines=True,
+                            shell=True
+                        )
+                    except subprocess.CalledProcessError as p_err:
+                        stdout = str(p_err)
+
+                self.logger.debug(bash_task)
 
                 self.logger.debug("\n############# BEGIN TASK OUTPUT #############\n")
-                self.logger.debug(res.stdout)
+                self.logger.debug(stdout)
                 self.logger.debug("\n#############  END TASK OUTPUT  #############\n")
 
             else:

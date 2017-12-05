@@ -13,7 +13,7 @@ from backdat.planners.util import make_plan_line
 from backdat.planners.dumbplan import make_plan
 
 class BackupArgs(object):
-    """ basically a dict to pass to the back up driver (RemoteInterface)... 
+    """ basically a dict to pass to the back up driver (RemoteInterface)...
     why didn't I just use a dict?
     """
     source = "/opt/backdat/backdat.py"
@@ -156,10 +156,10 @@ class BackupManager(object):
             while(True):
                 next_time = window_iter.get_next(datetime)
                 if next_time - last_time < threshold:
-                    logger.debug(
-                        'next:' + str(next_time) +
-                        ' last:' + str(last_time)
-                    )
+                    # logger.debug(
+                    #     'next:' + str(next_time) +
+                    #     ' last:' + str(last_time)
+                    # )
                     if last_time > time_to_give_up:
                         logger.warn(
                             "Search for end of window exceeded MAX_DELTA (" +

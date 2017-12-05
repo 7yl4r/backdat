@@ -13,7 +13,9 @@ from backdat.planners.util import make_plan_line
 from backdat.planners.dumbplan import make_plan
 
 class BackupArgs(object):
-    """ basically a dict to pass to the back up driver (RemoteInterface)... why didn't I just use a dict? """
+    """ basically a dict to pass to the back up driver (RemoteInterface)... 
+    why didn't I just use a dict?
+    """
     source = "/opt/backdat/backdat.py"
     target = "gdrive-ty:/IMARS/backups/test/"
     backuper_log = "/var/opt/backdat/backup.log"
@@ -45,6 +47,7 @@ class BackupManager(object):
         try:
             hostname = get_hostname()
             for next_backup in backup_plan.read(hostname):
+                self.logger.debug(".")
                 self.set_next_backup(next_backup)
 
                 if (BackupManager.enough_time_remaining()):
@@ -79,6 +82,7 @@ class BackupManager(object):
 
     def set_next_backup(self, backup_dict):
         """ loads given backup dict into next_backup_args """
+        self.logger.debug(backup_dict["source"] + "\n\t=> " + backup_dict["target"])
         self.next_backup_args.source = backup_dict["source"]
         self.next_backup_args.target = backup_dict["target"]
 
@@ -93,7 +97,8 @@ class BackupManager(object):
         return true if we have enough time left in the window to complete
         the next backup task
         """
-        estimated_next_backup_tf = datetime.now() + timedelta(minutes=5)  # NOTE: could calc better estimate
+        estimated_next_backup_tf = datetime.now() + timedelta(minutes=5)
+        # NOTE: could calc better estimate
         return BackupManager.inside_cron_window(
             estimated_next_backup_tf,
             BackupManager.get_host_setting(host_settings.KEYS.BACKUP_TIMES)
@@ -118,17 +123,30 @@ class BackupManager(object):
             return False
 
     @staticmethod
-    def get_window_edges( windowstr):
+    def get_window_edges( windowstr, MAX_DELTA=timedelta(hours=25)):
         """
-        return datetime of the end current backup window
-        and the datetime of the start of the next window
+        Returns datetime of the end current backup window
+        and the datetime of the start of the next window.
+        Assumes the window is smaller than MAX_DELTA.
+
+        Parameters
+        ----------------
+        windowstr : crontab-like str
+            the window to explore
+        MAX_DELTA : datetime.timedelta
+            max time in future to check for the window before giving up
+            and assuming the window is infinite
         """
         logger = logging.getLogger(__file__)
+        def _max_window_edges():
+            """ use this when the window looks infinite """
+            return datetime.max, datetime.now() + timedelta(hours=1)
 
         if windowstr == "* * * * *":
             logger.warn("Attempting to calculate edge of infinite window!")
-            return datetime.max, datetime.now() + timedelta(hours=1)
+            return _max_window_edges()
         else:
+            time_to_give_up = datetime.now() + MAX_DELTA
             last_time = datetime.now()
             # threshold should be << than window width, but > cron granularity
             # this method assumes that the cron string minutes column is *, ie
@@ -138,7 +156,18 @@ class BackupManager(object):
             while(True):
                 next_time = window_iter.get_next(datetime)
                 if next_time - last_time < threshold:
-                    last_time = next_time
+                    logger.debug(
+                        'next:' + str(next_time) +
+                        ' last:' + str(last_time)
+                    )
+                    if last_time > time_to_give_up:
+                        logger.warn(
+                            "Search for end of window exceeded MAX_DELTA (" +
+                            str(MAX_DELTA) + ")"
+                        )
+                        return _max_window_edges()
+                    else:
+                        last_time = next_time
                 else:
                     logger.debug("running until  " + str(last_time))
                     logger.debug("will resume at " + str(next_time))

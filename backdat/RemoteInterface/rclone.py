@@ -130,16 +130,8 @@ def backup(args):
         err_count  = last_status[1].split(":")[1].strip()
         check_count = last_status[2].split(":")[1].strip()
         files_sent = last_status[3].split(":")[1].strip()
+        time_spent = parse_time_spent(last_status[4])
 
-        time_parts = re.findall(r"[-+]?\d*\.\d+|\d+", last_status[4].split(":")[1])
-        if (len(time_parts) == 1):  # s only
-            time_spent = time_parts[0]
-        elif (len(time_parts) == 2):  # m & s
-            time_spent = time_parts[0]*60 + time_parts[1]
-        elif (len(time_parts) == 3):  # h m s
-            time_spent = time_parts[0]*60*60 + time_parts[1]*60 + time_parts
-        else:
-            raise ValueError("cannot parse time array : " + str(time_parts))
 
         # write a summary of the rclone output to file
         sumlog.write("{\n" +
@@ -151,3 +143,22 @@ def backup(args):
             '\t"backuper.time_spent":' + str(time_spent) + '\n'
             "}\n"
         )
+
+def parse_time_spent(status_string):
+    """ parses the "Elapsed time:" line of rclone's output.
+
+    Parameters
+    ------------
+    status_string : str
+        The "Elapsed time" status line from rclone's stdout.
+        Example: "Elapsed time:  1h18m27.9s"
+    """
+    time_parts = re.findall(r"[-+]?\d*\.\d+|\d+", status_string.split(":")[1])
+    if (len(time_parts) == 1):  # s only
+        return int(round(float(time_parts[0])))
+    elif (len(time_parts) == 2):  # m & s
+        return int(time_parts[0])*60 + int(round(float(time_parts[1])))
+    elif (len(time_parts) == 3):  # h m s
+        return int(time_parts[0])*60*60 + int(time_parts[1])*60 + int(round(float(time_parts[2])))
+    else:
+        raise ValueError("cannot parse time array : " + str(time_parts))

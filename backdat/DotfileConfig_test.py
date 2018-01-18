@@ -16,7 +16,7 @@ except ImportError:
 # dependencies:
 from backdat import DotfileConfig
 
-SAMPLE_FILES_DIR="/opt/backdat/docs/example_files"
+SAMPLE_FILES_DIR="/opt/backdat/docs/example_files/input"
 
 class Test_dotfile_config_loader(TestCase):
 

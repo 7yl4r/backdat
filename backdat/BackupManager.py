@@ -75,10 +75,19 @@ class BackupManager(object):
         do the next backup action
         """
         self.logger.info("starting next backup action...")
-        rclone.backup(self.next_backup_args)
-        backup_stats.update_stats(self.next_backup_args)
-        backup_plan.remove_completed_action(self.next_backup_args)
-        backup_history.log_backup_action(self.next_backup_args)
+        try:
+            rclone.backup(self.next_backup_args)
+            status = backup_stats.ACTION_STATUS.DONE
+            backup_history.log_backup_action(self.next_backup_args)
+        except Exception as err:
+            self.logger.error("backup action failed!", err)
+            status = backup_stats.ACTION_STATUS.FAIL
+        finally:
+            backup_stats.update_stats(
+                self.next_backup_args,
+                status
+            )
+            backup_plan.remove_action(self.next_backup_args)
 
     def set_next_backup(self, backup_dict):
         """ loads given backup dict into next_backup_args """

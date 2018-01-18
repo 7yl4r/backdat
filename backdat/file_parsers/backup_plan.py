@@ -50,9 +50,9 @@ def trim_time_column(line):
     """
     return " ".join(line.split("\t")[1:])
 
-def remove_completed_action(backup_args):
+def remove_action(backup_args):
     """
-    Removes line from backup plan (because it has been completed).
+    Removes line from backup plan (because it has been completed or failed).
     Ignores the time of the planned action.
     """
     logger = logging.getLogger(__file__)

@@ -6,6 +6,7 @@ import logging
 from datetime import datetime
 
 BACKDAT_PATH = "/opt/backdat/backdat.py"
+LOCKFILE = "/tmp/backdat.lockfile"
 CRON_FILE_PATH = "/etc/cron.d/backdat"  # NOTE: not cross-platform
 CRON_TIME_FMT = "%M %H * * *" # %d %m %w"
 
@@ -17,7 +18,8 @@ def write_crontab(time_to_schedule):
         exact time of the start of the next backup window
     """
     logger = logging.getLogger(__name__)
-    cmd = ' root {}'.format(BACKDAT_PATH)
+    # flock prevents duplicate processes using a lockfile
+    cmd = ' root /usr/bin/flock -n {} {}'.format(LOCKFILE, BACKDAT_PATH)
     cronstr = time_to_schedule.strftime(CRON_TIME_FMT)
 
     with open(CRON_FILE_PATH, 'w') as cronfile:

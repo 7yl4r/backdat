@@ -32,13 +32,14 @@ class ProcessWrapHandler(object):
         """
         Runs the pre-tasks, the wrapped process, then the post-tasks
         """
-        self.logger.info('starting pre-job hooks...')
-        self.pre()
-
-        self.logger.info('starting wrapped job:')
-        self.logger.info(str(wrapped_command))
         try:
-            res_stdout = subprocess.check_output(wrapped_command,
+            self.logger.info('starting pre-job hooks...')
+            self.pre()
+
+            self.logger.info('starting wrapped job:')
+            self.logger.info(str(wrapped_command))
+            res_stdout = subprocess.check_output(
+                wrapped_command,
                 # stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True
@@ -57,8 +58,8 @@ class ProcessWrapHandler(object):
             self.logger.debug("\n#############  END SUBPROCESS OUTPUT  #############\n")
             # self.logger.info('subprocess exit w/ code ' + str(res.returncode))
 
-        self.logger.info('starting post-job hooks...')
-        self.post()
+            self.logger.info('starting post-job hooks...')
+            self.post()
 
         return res_stdout
 

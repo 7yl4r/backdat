@@ -62,41 +62,15 @@ def backup(args):
         args.source,
         logger
     )
+    res_stdout = process_handler.execute(
+        wrapped_command=build_rclone_cmd(args)
+    )
 
-    logger.info('starting pre-job hooks...')
-    process_handler.pre()
-
-    logger.info('starting rclone job...')
-    rclone_cmd = build_rclone_cmd(args)
-    logger.info(str(rclone_cmd))
-    try:
-        res_stdout = subprocess.check_output(rclone_cmd,
-            # stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            universal_newlines=True
-        )
-        # logger.debug(res.args)
-
-    except subprocess.CalledProcessError as sub_err:
-        logger.error("rclone subprocess failure; returned "+ str(sub_err.returncode))
-        res_stdout = sub_err.output
-        raise sub_err
-
-    finally:
-        logger.debug("\n############# BEGIN SUBPROCESS OUTPUT #############\n")
-        logger.debug(res_stdout)
-
-        # write separate rclonelog if given
-        if args.rclonelog is not None:
-            with open(args.rclonelog, "a") as rclonelog:
-                rclonelog.write(res_stdout)
-
-        logger.debug("\n#############  END SUBPROCESS OUTPUT  #############\n")
-        # logger.info('rclone exit w/ code ' + str(res.returncode))
-
-    logger.info('starting post-job hooks...')
-    process_handler.post(args.backuper_log)
-
+    # write separate rclonelog if given
+    if args.rclonelog is not None:
+        with open(args.rclonelog, "a") as rclonelog:
+            rclonelog.write(res_stdout)
+            
     # status=`$RCLONE -v --modify-window 672h --config=$CFG sync $CP_FROM $CP_TARGET | tee /dev/fd/5 | tail -200`
 
     # record metrics in args.summarylog

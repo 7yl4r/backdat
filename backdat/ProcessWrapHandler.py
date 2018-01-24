@@ -5,33 +5,79 @@ class containing methods for doing things before or after a process
 import os
 import subprocess
 
-#from gdrive_backup import emailer
-
 allowed_bash_cmds = ['virsh']
 
 class ProcessWrapHandler(object):
     def __init__(self, config, file_path, parent_logger):
+        """
+        Parameters
+        -------------
+        config : dict
+            Configuration dictionary of shape:
+            ```
+            self.config = {
+                "pre": [],
+                "post": [],
+                "on_error": []
+            }
+            ```
+        filename : str file path
+            path to file we are processing
+        """
         self.config = config
         self.filename = os.path.basename(os.path.splitext(file_path)[0])  # name, no extension
-        self.logger = parent_logger  # logger passthrough
+        self.logger = parent_logger  # logger passthrough (TODO: why?)
+
+    def execute(wrapped_command):
+        """
+        Runs the pre-tasks, the wrapped process, then the post-tasks
+        """
+        self.logger.info('starting pre-job hooks...')
+        self.pre()
+
+        self.logger.info('starting wrapped job:')
+        self.logger.info(str(wrapped_command))
+        try:
+            res_stdout = subprocess.check_output(wrapped_command,
+                # stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True
+            )
+            # self.logger.debug(res.args)
+
+        except subprocess.CalledProcessError as sub_err:
+            self.logger.error("wrapped subprocess failure; returned "+ str(sub_err.returncode))
+            res_stdout = sub_err.output
+            raise sub_err
+
+        finally:
+            self.logger.debug("\n############# BEGIN SUBPROCESS OUTPUT #############\n")
+            self.logger.debug(res_stdout)
+
+            self.logger.debug("\n#############  END SUBPROCESS OUTPUT  #############\n")
+            # self.logger.info('subprocess exit w/ code ' + str(res.returncode))
+
+        self.logger.info('starting post-job hooks...')
+        self.post()
+
+        return res_stdout
 
     def pre(self):
         self._do_each(self.config["pre"])
 
-    def post(self, logpath):
-        self._do_each(self.config["post"], logpath)
+    def post(self):
+        self._do_each(self.config["post"])
 
-    def on_error(self, logpath):
+    def on_error(self):
         self._do_each(self.config["on_error"], logpath)
 
-    def _do_each(self, arry, logpath=None):
+    def _do_each(self, arry):
         """ execute each task in given array """
         for task in arry:
             args = task.split()
             cmd = args[0]
             self.logger.info('executing task: ' + task + '...')
             if cmd == 'email_summary':
-                #emailer.email_summary(args[1], logpath)
                 self.logger.error("summary emailing disabled");
             if cmd in allowed_bash_cmds:
                 bash_task = task.replace('$filename', self.filename)

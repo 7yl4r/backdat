@@ -21,7 +21,7 @@ class BackupArgs(object):
     backuper_log = "/var/opt/backdat/backup.log"
     summarylog = "/var/opt/backdat/summary.log"
     rclonelog = None
-    window = "24h"
+    window = str(24*30)+"h"
     verbose = 0
 
     def get_plan_line(self):

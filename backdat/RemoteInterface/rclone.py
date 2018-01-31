@@ -30,6 +30,9 @@ def build_rclone_cmd(args):
     # TODO: set log-level based on args.verbose value
     cmd = [
         RCLONE,
+        # TODO: make the following hard-coded str more general:
+        '--backup-dir', args.target.replace("IMARS/backups/backdat/", "IMARS/backups/backdat_old/"),
+        '--ignore-size',
         '--modify-window', args.window,
         '--config', RCLONE_CFG,
         # '--log-file', args.rclonelog,

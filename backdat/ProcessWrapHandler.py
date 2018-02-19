@@ -28,7 +28,7 @@ class ProcessWrapHandler(object):
         self.filename = os.path.basename(os.path.splitext(file_path)[0])  # name, no extension
         self.logger = parent_logger  # logger passthrough (TODO: why?)
 
-    def execute(wrapped_command):
+    def execute(self, wrapped_command):
         """
         Runs the pre-tasks, the wrapped process, then the post-tasks
         """

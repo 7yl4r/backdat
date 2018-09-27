@@ -10,6 +10,7 @@ from backdat.file_parsers.fileset import get_fileset_statlist, STAT_KEYS
 DEFAULT_PATH = "/var/opt/backdat/backup-history.log"
 TIME_FORMAT = "%Y-%m-%d %H:%M"
 
+
 def log_backup_action(action, logpath=DEFAULT_PATH):
     """
     creates log in entry file for given action
@@ -26,6 +27,7 @@ def log_backup_action(action, logpath=DEFAULT_PATH):
             action.source,
             action.target + "\n"
         ]))
+
 
 def get_most_stale_file(logpath=DEFAULT_PATH):
     """
@@ -44,6 +46,7 @@ def get_most_stale_file(logpath=DEFAULT_PATH):
             oldest_name = fstat[STAT_KEYS.SOURCE]
     return oldest_name, oldest_date
 
+
 def get_dawn_of_time():
     """
     returns the earliest possible time we can handle as formatted string.
@@ -55,6 +58,7 @@ def get_dawn_of_time():
         ValueError: time data '1-01-01 00:00' does not match format '%Y-%m-%d %H:%M'
     """
     return datetime.strftime(datetime.min.replace(year=1000), TIME_FORMAT)
+
 
 def get_last_upload_times(filename, n_times=1, logpath=DEFAULT_PATH):
     """
@@ -83,6 +87,7 @@ def get_last_upload_times(filename, n_times=1, logpath=DEFAULT_PATH):
         logger.warn("No backup history found")
         return [get_dawn_of_time()]*n_times
 
+
 def sum_avg_timedeltas(timedelts):
     """
     returns sum & average of given list of timedeltas because sum() and
@@ -94,6 +99,16 @@ def sum_avg_timedeltas(timedelts):
     delt_avg = delt_sum / len(timedelts)
 
     return delt_sum, delt_avg
+
+
+def get_backup_period_max(n_backups_to_check):
+    """
+    Returns longest backup period.
+    Currently uses get_backup_period_stats to do this.
+    """
+    avg_t, min_t, max_t = get_backup_period_stats(n_backups_to_check)
+    return max_t.total_seconds()
+
 
 def get_backup_period_stats(n_backups_to_check):
     """

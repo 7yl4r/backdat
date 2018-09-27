@@ -8,6 +8,7 @@ from backdat.file_parsers import fileset
 from backdat.file_parsers import crontab
 from backdat.file_parsers import backup_history
 
+
 def get_theoretical_assessment(
     assess_window=timedelta(days=30)
 ):
@@ -55,6 +56,7 @@ def get_theoretical_assessment(
         'coverage': est_throughput / throughput_needed
     }
 
+
 def assessment_report(assment):
     """
     return nicely formated report of given assessment
@@ -66,7 +68,7 @@ def assessment_report(assment):
         "=== Backup History ===\n"
         "\tmost stale file: {} - {}\n".format(stalest_date.strftime(backup_history.TIME_FORMAT), stalest_file) +
         "\tbackup frequency avg 1/{}\n".format(period_avg) +
-        "\tbackup frequency range 1/{} - 1/{}\n".format(period_min, period_max) + 
+        "\tbackup frequency range 1/{} - 1/{}\n".format(period_min, period_max) +
         "=== Estimated Throughput Analysis ===\n"
         "\t{} / {} Tb throughput used over {}\n".format(
             round(assment['throughput_demand']/1e6),
@@ -79,3 +81,7 @@ def assessment_report(assment):
         "\t" + crontab.get_next_cron_report() +
         "\n"
     )
+
+
+def assess_max_period():
+    return round(backup_history.get_backup_period_max(3))

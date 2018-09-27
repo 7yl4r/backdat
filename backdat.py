@@ -28,6 +28,12 @@ if __name__ == "__main__":
 
     parser_status = subparsers.add_parser('status', help='host coverage assessment')
     # parser_status.add_argument('hostname', type=str, help='name of host to check')
+    parser_status.add_argument(
+        '--max_period',
+        help='prints max backup period in seconds out of all files & exits',
+        action='store_true',
+        default=False
+    )
     parser_status.set_defaults(func=status)
 
     parser_backup = subparsers.add_parser('backup', help='try backing up right now')

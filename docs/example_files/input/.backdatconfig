@@ -3,7 +3,8 @@
         ".backdatconfig files are used to configure pre- & post-backup jobs."
     ],
     "pre":[
-        "virsh suspend $filename"
+        "virsh suspend $filename",
+        "virsh dumpxml $filename > $filename.xml"
     ],
     "post":[
         "virsh resume $filename"

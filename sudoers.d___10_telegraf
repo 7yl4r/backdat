@@ -1,0 +1,3 @@
+# put this file into /etc/sudoers.d to allow telegraf to collect the
+# max_period metric.
+telegraf ALL=(ALL) NOPASSWD: /opt/backdat/backdat.py status --max_period

@@ -10,7 +10,7 @@ typically done manually - the planning step.
 Below is a table listing technologies compatible with backdat and
 where they fall in the backup process chain.
 
-|  plan    |  schedule  | compress | backup  |
+|  plan    |  schedule  | compress | copy    |
 |----------|------------|----------|---------|
 |  backdat | cron       |  (TODO)  | rclone  |
 

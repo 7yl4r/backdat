@@ -63,6 +63,8 @@ def get_fileset_statlist(cfgfilename=default_fileset_path):
                 elif os.path.isdir(src_filepath):
                     # dir we want to upload all at once
                     file_paths = [src_filepath]
+                    if file_paths[-1] != '/':  # assert last char is '/'
+                        file_paths += '/'
                 else:  # is file
                     file_paths = [src_filepath]
 

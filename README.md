@@ -2,6 +2,20 @@
 backdat data up.
 
 An attempt at declarative backup.
+Don't tell backdat _how_ to backup; tell backdat _what_ to backup.
+
+Backing up data follows a general process chain: `plan -> schedule -> compress -> backup`.
+Backdat attempts to fill a step in this backup process chain that is
+typically done manually - the planning step.
+Below is a table listing technologies compatible with backdat and
+where they fall in the backup process chain.
+
+|  plan    |  schedule  | compress | backup  |
+|----------|------------|----------|---------|
+|  backdat | cron       |  (TODO)  | rclone  |
+
+Backdat also acts to orchestrate the process flow between steps in the backup
+process chain.
 
 A backup plan is generated according to information given about your fileset, backup resources, and other preferences. Version 1 user-interface is all text file editing. A mockup of the settings files is in `/docs/example_files`.
 

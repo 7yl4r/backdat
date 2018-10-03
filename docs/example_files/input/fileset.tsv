@@ -14,7 +14,7 @@
 #/opt/gdrive-backuper/example/test file with spaces.txt	test_group
 
 # upload all files in directory	individually:
-/mnt/RAID/imars-objects/*	priority_1
+#/mnt/RAID/imars-objects/*	priority_1
 
 ## upload directory all at once:
 #/opt/gdrive-backuper/example	priority_2

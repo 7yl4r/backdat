@@ -2,7 +2,7 @@
     "//": [
         " /etc/opt/backdat/resources.json",
         "",
-        " This user-facing file defines the resources which can be backed up to. ",
+        " This user-facing file defines resources which can be backed up to. ",
         "",
         " This file is global (common accross all hosts). ",
         "",
@@ -11,7 +11,8 @@
         " login:        details needed to interface ",
         " limits:       defines max space & throughput ",
         " notify_on:    sets up email notifications for events ",
-        " site_groups:  used to group multiple remotes together so that all your backups don't end up in one datacenter ",
+        " site_groups:  used to group multiple remotes together so that all",
+        "               backups don't end up in one datacenter ",
         " safety_rating: used to prioritize backups to minimize chance of loss "
     ],
     "resources":[

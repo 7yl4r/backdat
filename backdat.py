@@ -14,11 +14,15 @@ if __name__ == "__main__":
     # =========================================================================
     parser = ArgumentParser(description='declarative backup manager')
 
-    parser.add_argument("-v", "--verbose", help="increase output verbosity",
-                        action="count",
-                        default=0
+    parser.add_argument(
+        "-v", "--verbose",
+        help="increase output verbosity",
+        action="count",
+        default=0
     )
-    parser.set_defaults(func=backup)  # set default behavior if subcommand not given
+
+    # set default behavior if subcommand not given
+    parser.set_defaults(func=backup)
 
     subparsers = parser.add_subparsers(
         title='subcommands',
@@ -26,8 +30,10 @@ if __name__ == "__main__":
         help='addtnl help for subcommands: `backdat $subcommand -h`'
     )
 
-    parser_status = subparsers.add_parser('status', help='host coverage assessment')
-    # parser_status.add_argument('hostname', type=str, help='name of host to check')
+    parser_status = subparsers.add_parser(
+        'status', help='host coverage assessment'
+    )
+    # parser_status.add_argument('hostname', type=str, help='host to check')
     parser_status.add_argument(
         '--max_period',
         help='prints max backup period in seconds out of all files & exits',
@@ -36,14 +42,20 @@ if __name__ == "__main__":
     )
     parser_status.set_defaults(func=status)
 
-    parser_backup = subparsers.add_parser('backup', help='try backing up right now')
+    parser_backup = subparsers.add_parser(
+        'backup', help='try backing up right now'
+    )
     parser_backup.set_defaults(func=backup)
 
     parser_plan = subparsers.add_parser('plan', help='generate backup plan')
     parser_plan.set_defaults(func=plan)
 
-    parser_check = subparsers.add_parser('check', help='show last upload of a specific file')
-    parser_check.add_argument('filename', type=str, help='name of the file to check')
+    parser_check = subparsers.add_parser(
+        'check', help='show last upload of a specific file'
+    )
+    parser_check.add_argument(
+        'filename', type=str, help='name of the file to check'
+    )
     parser_check.set_defaults(func=check)
 
     args = parser.parse_args()
@@ -52,11 +64,11 @@ if __name__ == "__main__":
     # =========================================================================
     # === convert -v, -vv, -vvv, etc into logging levels
     if (args.verbose == 0):
-        _level=logging.WARNING
+        _level = logging.WARNING
     elif (args.verbose == 1):
-        _level=logging.INFO
-    else: #} (args.verbose == 2){
-        _level=logging.DEBUG
+        _level = logging.INFO
+    else:  # } (args.verbose == 2){
+        _level = logging.DEBUG
 
     # === (optional) create custom logging format(s)
     # https://docs.python.org/3/library/logging.html#logrecord-attributes
@@ -86,7 +98,7 @@ if __name__ == "__main__":
 
     logging.basicConfig(
         handlers=_handlers,
-        level=logging.DEBUG  # this must be set to lowest of all levels used in handlers
+        level=logging.DEBUG  # must be set to lowest of all levels in handlers
     )
     # =========================================================================
 

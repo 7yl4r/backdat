@@ -15,11 +15,11 @@ from backdat.ProcessWrapHandler import ProcessWrapHandler
 from backdat.DotfileConfig import DotfileConfig
 
 # === global vars
-MY_PATH    = '/var/opt/backdat/'
-RCLONE     = "rclone"
+MY_PATH = '/var/opt/backdat/'
+RCLONE = "rclone"
 RCLONE_CFG = MY_PATH + "rclone.conf"
 
-if not MY_PATH in sys.path:  # TODO: rm this
+if MY_PATH not in sys.path:  # TODO: rm this
     sys.path.append(MY_PATH)
 
 
@@ -31,7 +31,9 @@ def build_rclone_cmd(args):
     cmd = [
         RCLONE,
         # TODO: make the following hard-coded str more general:
-        '--backup-dir', args.target.replace("IMARS/backups/backdat/", "IMARS/backups/backdat_old/"),
+        '--backup-dir', args.target.replace(
+            "IMARS/backups/backdat/", "IMARS/backups/backdat_old/"
+        ),
         '--ignore-size',
         '--modify-window', args.window,
         '--config', RCLONE_CFG,
@@ -41,6 +43,7 @@ def build_rclone_cmd(args):
         args.source, args.target
     ]
     return cmd
+
 
 def backup(args):
     """
@@ -54,8 +57,10 @@ def backup(args):
        args.backuper_log, maxBytes=1e6, backupCount=5
     )
 
-    #logfile_handler.setLevel(logging.DEBUG)
-    log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    # logfile_handler.setLevel(logging.DEBUG)
+    log_formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
     logfile_handler.setFormatter(log_formatter)
     logger.addHandler(logfile_handler)
 
@@ -73,8 +78,9 @@ def backup(args):
     if args.rclonelog is not None:
         with open(args.rclonelog, "a") as rclonelog:
             rclonelog.write(res_stdout)
-            
-    # status=`$RCLONE -v --modify-window 672h --config=$CFG sync $CP_FROM $CP_TARGET | tee /dev/fd/5 | tail -200`
+
+    # status=`$RCLONE -v --modify-window 672h --config=$CFG sync
+    # $CP_FROM $CP_TARGET | tee /dev/fd/5 | tail -200`
 
     # record metrics in args.summarylog
     def parse_units(number, units):
@@ -98,20 +104,20 @@ def backup(args):
         last_status = res_stdout.split("\n")[-6:]
         logger.debug("parsing rclone output: \n" + str(last_status))
         # parse out the various numbers
-        byte_num, byte_unit  = last_status[0].split(':')[1].strip().split(' ')[:2]
+        byte_num, byte_unit = last_status[0].split(':')[1].strip().split(' ')[:2]
         bytes_sent = parse_units(byte_num, byte_unit)
 
         speed_num, speed_unit = last_status[0].split('(')[1].split(')')[0].split(' ')
         avg_speed = parse_units(speed_num, speed_unit[:-2])  # :-2 strips the /s
 
-        err_count  = last_status[1].split(":")[1].strip()
+        err_count = last_status[1].split(":")[1].strip()
         check_count = last_status[2].split(":")[1].strip()
         files_sent = last_status[3].split(":")[1].strip()
         time_spent = parse_time_spent(last_status[4])
 
-
         # write a summary of the rclone output to file
-        sumlog.write("{\n" +
+        sumlog.write(
+            "{\n" +
             '\t"backuper.bytes_sent":' + str(bytes_sent) + ',\n'
             '\t"backuper.avg_speed":' + str(avg_speed) + ',\n'
             '\t"backuper.errors":' + str(err_count) + ',\n'
@@ -120,6 +126,7 @@ def backup(args):
             '\t"backuper.time_spent":' + str(time_spent) + '\n'
             "}\n"
         )
+
 
 def parse_time_spent(status_string):
     """ parses the "Elapsed time:" line of rclone's output.

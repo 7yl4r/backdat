@@ -39,6 +39,7 @@ def build_rclone_cmd(args):
         '--config', RCLONE_CFG,
         # '--log-file', args.rclonelog,
         '--log-level', 'INFO',
+        '--retries', '1',
         'sync',
         args.source, args.target
     ]

@@ -53,8 +53,10 @@ class ProcessWrapHandler(object):
 
         finally:
             self.logger.debug("\n############# BEGIN SUBPROCESS OUTPUT #############\n")
-            self.logger.debug(res_stdout)
-
+            try:
+                self.logger.debug(res_stdout)
+            except:
+                self.logger.debug("FAILED TO GET SUBPROCESS STD OUT")
             self.logger.debug("\n#############  END SUBPROCESS OUTPUT  #############\n")
             # self.logger.info('subprocess exit w/ code ' + str(res.returncode))
 

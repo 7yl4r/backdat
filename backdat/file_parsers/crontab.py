@@ -5,10 +5,13 @@ helpers for reading/writing to /etc/cron.d/backdat
 import logging
 from datetime import datetime
 
-BACKDAT_PATH = "/opt/backdat/backdat.py"
 LOCKFILE = "/tmp/backdat.lockfile"
 CRON_FILE_PATH = "/etc/cron.d/backdat"  # NOTE: not cross-platform
 CRON_TIME_FMT = "%M %H * * *" # %d %m %w"
+BACKDAT_PATH = "/opt/backdat/backdat.py"
+CHRONIC_PATH = "/usr/bin/chronic"
+FLOCK_PATH = "/usr/bin/flock"
+
 
 def write_crontab(time_to_schedule):
     """
@@ -19,7 +22,12 @@ def write_crontab(time_to_schedule):
     """
     logger = logging.getLogger(__name__)
     # flock prevents duplicate processes using a lockfile
-    cmd = ' root /usr/bin/flock -n {} {}'.format(LOCKFILE, BACKDAT_PATH)
+    cmd = ' root {chronic} {flock} -n {lockfile} {backdat}'.format(
+        chronic=CHRONIC_PATH, 
+        flock=FLOCK_PATH, 
+        lockfile=LOCKFILE, 
+        backdat=BACKDAT_PATH
+    )
     cronstr = time_to_schedule.strftime(CRON_TIME_FMT)
 
     with open(CRON_FILE_PATH, 'w') as cronfile:

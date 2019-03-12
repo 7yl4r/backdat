@@ -42,3 +42,6 @@ Bash commands that are allowed are listed in `ProcessWrapHandler.allowed_bash_cm
 Variables can be used in backup commands (actually just one for now):
 
 * `$filename` - the name of the file being backed up
+
+# requirements
+python2.7+

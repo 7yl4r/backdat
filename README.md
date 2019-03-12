@@ -44,4 +44,7 @@ Variables can be used in backup commands (actually just one for now):
 * `$filename` - the name of the file being backed up
 
 # requirements
-python2.7+
+* python2.7+ b/c:
+    * subprocess.check_output
+* [moreutils](https://joeyh.name/code/moreutils/) b/c:
+    * chronic
